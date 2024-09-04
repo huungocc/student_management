@@ -3,5 +3,7 @@
   "userName": "Tên người dùng",
   "password": "Mật khẩu",
   "login": "Đăng nhập",
-  "forgotPassword": "Quên mật khẩu?"
+  "backToLogin": "Quay về đăng nhập",
+  "forgotPassword": "Quên mật khẩu",
+  "send": "Gửi"
 }

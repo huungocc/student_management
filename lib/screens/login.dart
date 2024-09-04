@@ -48,13 +48,12 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           AppLocalizations.of(context)!.app_name,
                           style: TextStyle(color: Colors.black87, fontSize: 35, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 100),
+                        Spacer(),
                         Icon(Icons.account_balance_rounded, size: 30)
                       ],
                     ),
@@ -153,17 +152,7 @@ class _LoginState extends State<Login> {
                         ),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        child: Text(
-                          AppLocalizations.of(context)!.forgotPassword,
-                          style: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font)),
-                        onPressed: () {
-                          // Todo: Forgot Password
-                        },
-                      )
-                    ),
+                    const SizedBox(height: 35),
                   ],
                 ),
               ),
