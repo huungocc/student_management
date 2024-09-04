@@ -3,5 +3,7 @@
   "userName": "User Name",
   "password": "Password",
   "login": "Login",
-  "forgotPassword": "Forgot Password?"
+  "backToLogin": "Back to login",
+  "forgotPassword": "Forgot Password",
+  "send": "Send"
 }
