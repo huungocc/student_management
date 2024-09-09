@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_app_id">1:727336488420:android:b3917cd8e84e7bf63a8bf1</string>
+    <string name="google_api_key">AIzaSyCkqPc2lQsZTg6Erqp-GIC4bNeJJOFFhHo</string>
+    <string name="gcm_defaultSenderId">727336488420</string>
+    <string name="project_id">utc-manager</string>
+    <string name="storage_bucket">utc-manager.appspot.com</string>
+</resources>
