@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Đăng nhập với email và mật khẩu
   Future<User?> signInWithEmailAndPassword(BuildContext context, String email, String password) async {
@@ -24,13 +26,20 @@ class AuthService {
     }
   }
 
-  // Đăng ký tài khoản với email và mật khẩu
-  Future<User?> registerWithEmailAndPassword(BuildContext context, String email, String password) async {
+  // Đăng ký tài khoản với email, mật khẩu và role
+  Future<User?> signUpWithEmailAndPassword(BuildContext context, String email, String password, String role) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      // Lưu thông tin người dùng vào Firestore với role
+      await _firestore.collection('users').doc(userCredential.user?.uid).set({
+        'email': email,
+        'role': role,  // role: 'admin', 'student', 'instructor'
+      });
+
       return userCredential.user;
     } catch (e) {
       print(e);
@@ -39,7 +48,7 @@ class AuthService {
           content: Text(AppLocalizations.of(context)!.signUpFailed + ': $e'),
         ),
       );
-      throw e;
+      return null;
     }
   }
 
