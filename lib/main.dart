@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,7 +8,7 @@ import 'screens/screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LocaleProvider>(
         builder: (context, provider, child) {
           return MaterialApp(
-            initialRoute: Routes.login,
+            initialRoute: Routes.loading,
             routes: {
               Routes.loading: (context) => Loading(),
               Routes.login: (context) => Login(),

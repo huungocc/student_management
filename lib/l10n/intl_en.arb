@@ -1,9 +1,12 @@
 {
   "app_name": "UTC Manager",
-  "userName": "User Name",
+  "email": "Email",
   "password": "Password",
   "login": "Login",
   "backToLogin": "Back to login",
   "forgotPassword": "Forgot Password",
-  "send": "Send"
+  "send": "Send",
+  "signInFailed": "Failed to sign in",
+  "signOutFailed": "Failed to sign out",
+  "signUpFailed": "Failed to sign up"
 }

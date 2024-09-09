@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../managers/manager.dart';
+import '../services/service.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -13,11 +16,41 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final AuthService _authService = AuthService();
+
   final FocusNode _focusNodePassword = FocusNode();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
   bool _obscurePassword = true;
+
+  Future<void> _signIn() async {
+    // Hiển thị loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: SpinKitThreeBounce(
+            color: Colors.white,
+            size: 30.0,
+          ),
+        );
+      },
+    );
+
+    // Lấy giá trị từ TextEditingController
+    String email = _controllerUsername.text.trim();
+    String password = _controllerPassword.text;
+
+    // Đăng nhập
+    User? user = await _authService.signInWithEmailAndPassword(context, email, password);
+    Navigator.pop(context);
+    if (user != null) {
+      Navigator.pushReplacementNamed(context, Routes.home);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +96,9 @@ class _LoginState extends State<Login> {
                       keyboardType: TextInputType.name,
                       cursorColor: Colors.black87,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.userName,
+                        labelText: AppLocalizations.of(context)!.email,
                         labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                        prefixIcon: const Icon(Icons.person_outline_outlined),
+                        prefixIcon: const Icon(Icons.mail_outline_rounded),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -78,6 +111,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       onEditingComplete: () => _focusNodePassword.requestFocus(),
+                      //Todo: check email
                       // validator: (String? value) {
                       //   // if (value == null || value.isEmpty) {
                       //   //   return "Please enter username.";
@@ -119,11 +153,11 @@ class _LoginState extends State<Login> {
                         ),
 
                       ),
+                      //Todo: Check password
                       // validator: (String? value) {
                       //   if (value == null || value.isEmpty) {
                       //     return "Please enter password.";
                       //   }
-                      //   //Todo: Check password
                       //   // else if (value != _boxAccounts.get(_controllerUsername.text)) {
                       //   //   return "Wrong password.";
                       //   // }
@@ -142,9 +176,7 @@ class _LoginState extends State<Login> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {
-                            // Todo: Login
-                          },
+                          onPressed: _signIn,
                           child: Text(
                               AppLocalizations.of(context)!.login,
                               style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font)
