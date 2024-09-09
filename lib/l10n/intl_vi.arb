@@ -1,9 +1,12 @@
 {
   "app_name": "UTC Manager",
-  "userName": "Tên người dùng",
+  "email": "Email",
   "password": "Mật khẩu",
   "login": "Đăng nhập",
   "backToLogin": "Quay về đăng nhập",
   "forgotPassword": "Quên mật khẩu",
-  "send": "Gửi"
+  "send": "Gửi",
+  "signInFailed": "Đăng nhập không thành công",
+  "signOutFailed": "Đăng xuất không thành công",
+  "signUpFailed": "Đăng kí không thành công"
 }
