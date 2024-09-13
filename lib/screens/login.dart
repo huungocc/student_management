@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../managers/manager.dart';
 import '../services/service.dart';
@@ -25,23 +24,11 @@ class _LoginState extends State<Login> {
   bool _obscurePassword = true;
 
   Future<void> _signIn() async {
-    // Hiển thị loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: SpinKitThreeBounce(
-            color: Colors.white,
-            size: 30.0,
-          ),
-        );
-      },
-    );
-
     // Lấy giá trị từ TextEditingController
     String email = _controllerUsername.text.trim();
     String password = _controllerPassword.text;
+
+    FocusScope.of(context).unfocus();
 
     // Đăng nhập
     User? user = await _authService.signInWithEmailAndPassword(context, email, password);

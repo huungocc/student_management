@@ -8,5 +8,10 @@
   "send": "Send",
   "signInFailed": "Failed to sign in",
   "signOutFailed": "Failed to sign out",
-  "signUpFailed": "Failed to sign up"
+  "signUpFailed": "Failed to sign up",
+  "welcome": "Welcome,",
+  "subject": "Subject",
+  "classes": "Class",
+  "account": "Account",
+  "logout": "Logout"
 }
