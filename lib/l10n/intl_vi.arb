@@ -8,5 +8,10 @@
   "send": "Gửi",
   "signInFailed": "Đăng nhập không thành công",
   "signOutFailed": "Đăng xuất không thành công",
-  "signUpFailed": "Đăng kí không thành công"
+  "signUpFailed": "Đăng kí không thành công",
+  "welcome": "Xin chào,",
+  "subject": "Môn học",
+  "classes": "Lớp học",
+  "account": "Tài Khoản",
+  "logout": "Đăng xuất"
 }
