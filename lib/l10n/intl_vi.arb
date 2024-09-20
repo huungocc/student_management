@@ -13,5 +13,13 @@
   "subject": "Môn học",
   "classes": "Lớp học",
   "account": "Tài Khoản",
-  "logout": "Đăng xuất"
+  "logout": "Đăng xuất",
+  "notif": "Thông báo",
+  "search": "Tìm kiếm",
+  "title": "Tiêu đề",
+  "content": "Nội dung",
+  "cancel": "Hủy",
+  "ok": "OK",
+  "delete": "Xóa",
+  "edit": "Sửa"
 }

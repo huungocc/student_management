@@ -13,5 +13,13 @@
   "subject": "Subject",
   "classes": "Class",
   "account": "Account",
-  "logout": "Logout"
+  "logout": "Logout",
+  "notif": "Notification",
+  "search": "Search",
+  "title": "Title",
+  "content": "Content",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "delete": "Delete",
+  "edit": "Edit"
 }

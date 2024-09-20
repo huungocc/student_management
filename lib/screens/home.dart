@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:student_management/widgets/function_card.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
@@ -15,30 +14,16 @@ class _HomeState extends State<Home> {
   final AuthService _authService = AuthService();
 
   Future<void> _signOut() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: SpinKitThreeBounce(
-            color: Colors.black,
-            size: 30.0,
-          ),
-        );
-      },
-    );
-
     await _authService.signOut(context);
-    Navigator.pop(context);
     Navigator.pushReplacementNamed(context, Routes.login);
   }
 
   void _onNotiPressed() {
-    //Todo: Navigate to Notification Screen
+    Navigator.pushNamed(context, Routes.notif);
   }
 
   void _onSchedulePressed() {
-    //Todo: Navigate to Schedule Screen
+    //
   }
 
   void _onSubjectPressed() {
@@ -68,6 +53,10 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<void> _onHomeRefresh() async {
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,14 +69,14 @@ class _HomeState extends State<Home> {
               height: 150,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+                gradient: LinearGradient(
+                  colors: [Colors.blueAccent, Colors.redAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: 40, right: 40),
+                padding: EdgeInsets.only(left: 35, right: 35),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -99,11 +88,11 @@ class _HomeState extends State<Home> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.welcome,
-                              style: TextStyle(color: Colors.white, fontSize: 30, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'Nguyễn Hữu Ngọc',
-                              style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: Fonts.display_font),
+                              style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: Fonts.display_font),
                             ),
                           ],
                         ),
@@ -111,7 +100,7 @@ class _HomeState extends State<Home> {
                         CircleAvatar(
                           backgroundImage: AssetImage('assets/default_avt.png'),
                           //foregroundImage: NetworkImage(_currentUser!.photoURL!),
-                          radius: 35,
+                          radius: 32,
                         ),
                       ],
                     ),
@@ -119,32 +108,30 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    InfoCard(
-                      title: 'Tên thông báo',
-                      description: 'dd/mm/yyyy',
-                      iconData: Icons.notifications_active_outlined,
-                      bgColor: Colors.teal,
-                      elColor: Colors.white,
-                      onPressed: _onNotiPressed,
-                    ),
-                    InfoCard(
-                      title: 'Tên lớp học',
-                      description: 'Ca 1 101-A2',
-                      iconData: Icons.schedule_outlined,
-                      bgColor: Colors.cyan[600],
-                      elColor: Colors.white,
-                      onPressed: _onSchedulePressed,
-                    ),
-                    Scrollbar(
-                      thumbVisibility: true,
-                      thickness: 3,
-                      radius: Radius.circular(8),
-                      child: SingleChildScrollView(
+            RefreshIndicator(
+              onRefresh: _onHomeRefresh,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      InfoCard(
+                        title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+                        description: 'dd/mm/yyyy',
+                        iconData: Icons.notifications_active_outlined,
+                        bgColor: Colors.teal,
+                        elColor: Colors.white,
+                        onPressed: _onNotiPressed,
+                      ),
+                      InfoCard(
+                        title: 'Tên lớp học',
+                        description: 'Ca 1 101-A2',
+                        iconData: Icons.schedule_outlined,
+                        bgColor: Colors.cyan[600],
+                        elColor: Colors.white,
+                        onPressed: _onSchedulePressed,
+                      ),
+                      SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
@@ -172,8 +159,8 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                    ),
-                  ]
+                    ]
+                  ),
                 ),
               ),
             )
@@ -188,7 +175,7 @@ class _HomeState extends State<Home> {
           children: [
             GestureDetector(
               onTap: () {
-                //
+                _onInfoPressed();
               },
               child: Icon(Icons.edit_note_outlined, color: Colors.grey[800], size: 30)),
             GestureDetector(
