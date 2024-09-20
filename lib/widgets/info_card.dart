@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_scroll/text_scroll.dart';
 import '../managers/manager.dart';
 
 class InfoCard extends StatefulWidget {
@@ -26,8 +27,6 @@ class InfoCard extends StatefulWidget {
 class _InfoCardState extends State<InfoCard> {
   @override
   Widget build(BuildContext context) {
-    String displayTitle = widget.title.length > 25 ? '${widget.title.substring(0, 30)}...' : widget.title;
-
     return GestureDetector(
       onTap: () => widget.onPressed(),
       child: Container(
@@ -48,19 +47,23 @@ class _InfoCardState extends State<InfoCard> {
               children: [
                 Icon(widget.iconData, size: 30, color: widget.elColor ?? Colors.black87),
                 SizedBox(width: 16),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayTitle,
-                      style: TextStyle(fontSize: 16, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold, color: widget.elColor ?? Colors.black87),
-                    ),
-                    Text(
-                      widget.description,
-                      style: TextStyle(fontFamily: Fonts.display_font, fontSize: 13, color: widget.elColor ?? Colors.black87),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold, color: widget.elColor ?? Colors.black87),
+                      ),
+                      Text(
+                        widget.description,
+                        style: TextStyle(fontFamily: Fonts.display_font, fontSize: 13, color: widget.elColor ?? Colors.black87),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

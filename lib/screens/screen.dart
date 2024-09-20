@@ -1,3 +1,4 @@
-export 'package:student_management/screens/loading.dart';
-export 'package:student_management/screens/login.dart';
-export 'package:student_management/screens/home.dart';
+export 'loading.dart';
+export 'login.dart';
+export 'home.dart';
+export 'notif.dart';

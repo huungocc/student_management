@@ -32,7 +32,6 @@ class _LoginState extends State<Login> {
 
     // Đăng nhập
     User? user = await _authService.signInWithEmailAndPassword(context, email, password);
-    Navigator.pop(context);
     if (user != null) {
       Navigator.pushReplacementNamed(context, Routes.home);
     }
