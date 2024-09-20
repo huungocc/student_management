@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../managers/manager.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import '../utils/constants.dart';
+import '../managers/constants.dart';
 
 class UserScreen extends StatefulWidget {
   final VoidCallback onCancelPressed;
