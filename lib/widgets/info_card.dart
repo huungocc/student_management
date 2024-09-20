@@ -52,15 +52,36 @@ class _InfoCardState extends State<InfoCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      widget.title.length > 25
+                          ? TextScroll(
                         widget.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold, color: widget.elColor ?? Colors.black87),
+                        velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+                        pauseBetween: const Duration(seconds: 2),
+                        fadedBorder: true,
+                        fadeBorderSide: FadeBorderSide.right,
+                        style: TextStyle(
+                          fontFamily: Fonts.display_font,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: widget.elColor ?? Colors.black87
+                        ),
+                      )
+                          : Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontFamily: Fonts.display_font,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: widget.elColor ?? Colors.black87
+                        ),
                       ),
                       Text(
                         widget.description,
-                        style: TextStyle(fontFamily: Fonts.display_font, fontSize: 13, color: widget.elColor ?? Colors.black87),
+                        style: TextStyle(
+                          fontFamily: Fonts.display_font,
+                          fontSize: 13,
+                          color: widget.elColor ?? Colors.black87
+                        ),
                       ),
                     ],
                   ),

@@ -21,5 +21,9 @@
   "cancel": "Hủy",
   "ok": "OK",
   "delete": "Xóa",
-  "edit": "Sửa"
+  "edit": "Sửa",
+  "fullName": "Họ tên",
+  "country": "Quê quán",
+  "address": "Địa chỉ",
+  "phone": "SĐT"
 }
