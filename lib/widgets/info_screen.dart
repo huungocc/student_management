@@ -53,6 +53,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       fadedBorder: true,
                       fadeBorderSide: FadeBorderSide.right,
                       style: TextStyle(
+                        fontFamily: Fonts.display_font,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: widget.elColor ?? Colors.black87,
@@ -61,6 +62,7 @@ class _InfoScreenState extends State<InfoScreen> {
                     : Text(
                       widget.title,
                       style: TextStyle(
+                        fontFamily: Fonts.display_font,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: widget.elColor ?? Colors.black87,

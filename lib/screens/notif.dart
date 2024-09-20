@@ -93,7 +93,9 @@ class _NotifState extends State<Notif> {
               TextFormField(
                 controller: _controllerSearch,
                 cursorColor: Colors.black87,
+                style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                   hintText: AppLocalizations.of(context)!.search,
                   hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                   prefixIcon: const Icon(Icons.search_rounded),

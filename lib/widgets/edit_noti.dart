@@ -34,7 +34,10 @@ class _EditNotiState extends State<EditNoti> {
               minLines: 2,
               maxLines: 2,
               scrollPhysics: ClampingScrollPhysics(),
+              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.title,
+                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
                 hintText: AppLocalizations.of(context)!.title,
                 hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                 border: OutlineInputBorder(
@@ -57,7 +60,10 @@ class _EditNotiState extends State<EditNoti> {
                 minLines: 8,
                 maxLines: 8,
                 scrollPhysics: ClampingScrollPhysics(),
+                style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
                 decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.content,
+                  labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
                   hintText: AppLocalizations.of(context)!.content,
                   hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                   border: OutlineInputBorder(
@@ -79,7 +85,7 @@ class _EditNotiState extends State<EditNoti> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(130, 30),
-                    backgroundColor: Colors.red[600],
+                    backgroundColor: Colors.black87,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -95,7 +101,7 @@ class _EditNotiState extends State<EditNoti> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(130, 30),
-                    backgroundColor: Colors.black87,
+                    backgroundColor: Colors.teal,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),

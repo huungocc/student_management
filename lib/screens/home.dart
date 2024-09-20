@@ -35,11 +35,33 @@ class _HomeState extends State<Home> {
   }
 
   void _onInfoPressed() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: UserScreen(
+            onCancelPressed: _onCancelPressed,
+            onOkPressed: _onOkPressed,
+          ),
+        );
+      },
+    );
+  }
 
+  Future<void> _onCancelPressed() async {
+    Navigator.pop(context);
+  }
+
+  Future<void> _onOkPressed() async {
+    //
   }
 
   void _onUserPressed() {
-
+    //
   }
 
   void _onSettingPressed(BuildContext context) {
