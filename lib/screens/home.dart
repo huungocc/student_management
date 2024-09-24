@@ -27,12 +27,13 @@ class _HomeState extends State<Home> {
   }
 
   void _onSubjectPressed() {
-
+    Navigator.pushNamed(context, Routes.subject);
   }
 
   void _onClassPressed() {
 
   }
+
 
   void _onInfoPressed() {
     showModalBottomSheet(
@@ -61,7 +62,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onUserPressed() {
-    //
+
   }
 
   void _onSettingPressed(BuildContext context) {

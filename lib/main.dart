@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
               Routes.login: (context) => Login(),
               Routes.home: (context) => Home(),
               Routes.notif: (context) => Notif(),
+              Routes.subject: (context) => Subject(),
             },
             localizationsDelegates: [
               AppLocalizations.delegate,

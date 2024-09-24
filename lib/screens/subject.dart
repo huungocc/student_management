@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:student_management/widgets/add_subject.dart';
+
+
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Notif extends StatefulWidget {
+class Subject extends StatefulWidget {
+  const Subject({super.key});
+
   @override
-  State<Notif> createState() => _NotifState();
+  State<Subject> createState() => _SubjectState();
 }
 
-class _NotifState extends State<Notif> {
+class _SubjectState extends State<Subject> {
   final TextEditingController _controllerSearch = TextEditingController();
 
-  void _onNotifPressed() {
+  //-------su kien--------------
+  void _onSubjectPressed(){
     //hủy focus vào textfield
     FocusScope.of(context).requestFocus(new FocusNode());
     WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
@@ -20,18 +26,18 @@ class _NotifState extends State<Notif> {
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
-          title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-          description: 'dd/mm/yyyy',
-          info: 'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
-          iconData: Icons.notifications_active_outlined,
-          onDeletePressed: _deleteNotif,
-          onEditPressed: _editNotif,
+          title: 'Toan',
+          description: 'Dai cuong',
+          info: '1+1=3',
+          iconData: Icons.school_outlined,
+          onDeletePressed: _deleteSubject,
+          onEditPressed: _addSubject,
         );
       },
     );
   }
 
-  void _addNotif() {
+  void _addSubject(){
     FocusScope.of(context).requestFocus(FocusNode());
     WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -43,7 +49,9 @@ class _NotifState extends State<Notif> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: EditNoti(
+
+          child: AddSubject(
+
             onCancelPressed: _onCancelPressed,
             onOkPressed: _onOkPressed,
           ),
@@ -51,24 +59,22 @@ class _NotifState extends State<Notif> {
       },
     );
   }
-
-  Future<void> _deleteNotif() async {
-    //
-  }
-
-  void _editNotif() {
-    _addNotif();
-  }
-
-  Future<void> _onCancelPressed() async {
+  void _onCancelPressed(){
     Navigator.pop(context);
   }
 
-  Future<void> _onOkPressed() async {
-    //
+
+  Future<void> _onOkPressed() async{
+
   }
 
-  Future<void> _onNotifRefresh() async {
+  Future<void> _deleteSubject() async {
+
+
+  }
+
+
+  Future<void> _onSubjectRefresh() async {
     //
   }
 
@@ -80,8 +86,8 @@ class _NotifState extends State<Notif> {
         child: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            AppLocalizations.of(context)!.notif,
-            style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+            AppLocalizations.of(context)!.subject,
+              style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -89,7 +95,7 @@ class _NotifState extends State<Notif> {
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15.0,right: 15),
           child: Column(
             children: [
               TextFormField(
@@ -114,30 +120,33 @@ class _NotifState extends State<Notif> {
               ),
               SizedBox(height: 15),
               RefreshIndicator(
-                onRefresh: _onNotifRefresh,
+                onRefresh: _onSubjectRefresh,
                 child: Scrollbar(
-                  thumbVisibility: true,
-                  radius: Radius.circular(8),
-                  child: SingleChildScrollView(
-                    child: InfoCard(
-                      title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                      description: 'dd/mm/yyyy',
-                      iconData: Icons.notifications_active_outlined,
-                      onPressed: _onNotifPressed,
+                    thumbVisibility: true,
+                    radius: Radius.circular(8),
+                    child: SingleChildScrollView(
+                        child: InfoCard(
+                          title: 'Toan',
+                          description: 'Dai Cuong',
+                          iconData: Icons.school_outlined,
+                          onPressed: _onSubjectPressed,
+                        )
                     )
-                  )
                 ),
               )
             ],
+
           ),
         ),
+
+
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.red,
         elevation: 0,
         shape: CircleBorder(),
         child: Icon(Icons.add_rounded, color: Colors.white),
-        onPressed: _addNotif,
+        onPressed: _addSubject,
       ),
     );
   }
