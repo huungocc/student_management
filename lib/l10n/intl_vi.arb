@@ -25,5 +25,10 @@
   "fullName": "Họ tên",
   "country": "Quê quán",
   "address": "Địa chỉ",
-  "phone": "SĐT"
+  "phone": "SĐT",
+  "subjectName": "Tên môn học",
+  "subjectCategory": "    Loại môn học",
+  "numberOfCredit": "    Số tín chỉ",
+  "description": "Mô tả",
+  "numberOfDays": "Tổng số buổi"
 }

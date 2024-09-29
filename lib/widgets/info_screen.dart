@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class InfoScreen extends StatefulWidget {
   final String title;
   final String description;
+  final String info;
   final IconData iconData;
   final Color? bgColor;
   final Color? elColor;
@@ -16,6 +17,7 @@ class InfoScreen extends StatefulWidget {
     Key? key,
     required this.title,
     required this.description,
+    required this.info,
     required this.iconData,
     this.bgColor,
     this.elColor,
@@ -81,7 +83,7 @@ class _InfoScreenState extends State<InfoScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Text(
-                'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
+                widget.info,
                 style: TextStyle(fontSize: 16, fontFamily: Fonts.display_font),
                 softWrap: true,
               ),

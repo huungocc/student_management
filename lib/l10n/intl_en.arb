@@ -25,5 +25,10 @@
   "fullName": "Name",
   "country": "Country",
   "address": "Address",
-  "phone": "Phone"
+  "phone": "Phone",
+  "subjectName": "Subject name",
+  "subjectCategory": "    Subject category",
+  "numberOfCredit": "    Number of credit",
+  "description": "Description",
+  "numberOfDays": "Number of days"
 }

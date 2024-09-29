@@ -12,6 +12,7 @@ class EditNoti extends StatefulWidget {
     required this.onOkPressed,
   }) : super(key: key);
 
+
   @override
   State<EditNoti> createState() => _EditNotiState();
 }
@@ -19,6 +20,7 @@ class EditNoti extends StatefulWidget {
 class _EditNotiState extends State<EditNoti> {
   final TextEditingController _controllerTitle = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class _EditNotiState extends State<EditNoti> {
               ),
             ),
             SizedBox(height: 15),
+
             Container(
               child: TextField(
                 controller: _controllerDescription,
