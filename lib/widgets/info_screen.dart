@@ -9,8 +9,10 @@ class InfoScreen extends StatefulWidget {
   final IconData iconData;
   final Color? bgColor;
   final Color? elColor;
-  final VoidCallback onDeletePressed;
-  final VoidCallback onEditPressed;
+  final String leftButtonTitle;
+  final String rightButtonTitle;
+  final VoidCallback onLeftPressed;
+  final VoidCallback onRightPressed;
 
   const InfoScreen({
     Key? key,
@@ -19,8 +21,10 @@ class InfoScreen extends StatefulWidget {
     required this.iconData,
     this.bgColor,
     this.elColor,
-    required this.onDeletePressed,
-    required this.onEditPressed,
+    required this.leftButtonTitle,
+    required this.rightButtonTitle,
+    required this.onLeftPressed,
+    required this.onRightPressed,
   }) : super(key: key);
 
   @override
@@ -99,13 +103,13 @@ class _InfoScreenState extends State<InfoScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                onPressed: widget.onDeletePressed,
+                onPressed: widget.onLeftPressed,
                 child: Row(
                   children: [
                     Icon(Icons.delete_outline_outlined, color: Colors.white),
                     SizedBox(width: 10),
                     Text(
-                        AppLocalizations.of(context)!.delete,
+                        widget.leftButtonTitle,
                         style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
                     ),
                     SizedBox(width: 7),
@@ -120,13 +124,13 @@ class _InfoScreenState extends State<InfoScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                onPressed: widget.onEditPressed,
+                onPressed: widget.onRightPressed,
                 child: Row(
                   children: [
                     Icon(Icons.edit_outlined, color: Colors.white),
                     SizedBox(width: 10),
                     Text(
-                        AppLocalizations.of(context)!.edit,
+                        widget.rightButtonTitle,
                         style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
                     ),
                     SizedBox(width: 7),

@@ -22,8 +22,10 @@ class _NotifState extends State<Notif> {
           title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
           description: 'dd/mm/yyyy',
           iconData: Icons.notifications_active_outlined,
-          onDeletePressed: _deleteNotif,
-          onEditPressed: _editNotif,
+          leftButtonTitle: AppLocalizations.of(context)!.delete,
+          rightButtonTitle: AppLocalizations.of(context)!.edit,
+          onLeftPressed: _deleteNotif,
+          onRightPressed: _editNotif,
         );
       },
     );
