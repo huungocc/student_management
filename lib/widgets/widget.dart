@@ -3,3 +3,4 @@ export 'setting.dart';
 export 'info_screen.dart';
 export 'edit_noti.dart';
 export 'user_screen.dart';
+export 'schedule_in_day.dart';

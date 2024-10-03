@@ -24,8 +24,10 @@ class _NotifState extends State<Notif> {
           description: 'dd/mm/yyyy',
           info: 'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
           iconData: Icons.notifications_active_outlined,
-          onDeletePressed: _deleteNotif,
-          onEditPressed: _editNotif,
+          leftButtonTitle: AppLocalizations.of(context)!.delete,
+          rightButtonTitle: AppLocalizations.of(context)!.edit,
+          onLeftPressed: _deleteNotif,
+          onRightPressed: _editNotif,
         );
       },
     );
