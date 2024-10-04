@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onUserPressed() {
-
+  Navigator.pushNamed(context, Routes.account);
   }
 
   void _onSettingPressed(BuildContext context) {

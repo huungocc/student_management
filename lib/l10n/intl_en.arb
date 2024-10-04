@@ -30,5 +30,10 @@
   "subjectCategory": "    Subject category",
   "numberOfCredit": "    Number of credit",
   "description": "Description",
-  "numberOfDays": "Number of days"
+  "numberOfDays": "Number of days",
+  "resetPassword": "Reset password",
+  "passwordConfirm": "Password Confirm",
+  "create": "Create",
+  "accountType": "Account type"
+
 }
