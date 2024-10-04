@@ -1,43 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:student_management/widgets/add_subject.dart';
+import 'package:student_management/widgets/add_account.dart';
+import 'package:student_management/widgets/info_screen.dart';
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
 
-class Subject extends StatefulWidget {
-  const Subject({super.key});
+
+class Account extends StatefulWidget {
+  const Account({super.key});
 
   @override
-  State<Subject> createState() => _SubjectState();
+  State<Account> createState() => _AccountState();
 }
 
-class _SubjectState extends State<Subject> {
+
+class _AccountState extends State<Account> {
   final TextEditingController _controllerSearch = TextEditingController();
 
-  //-------su kien--------------
-  void _onSubjectPressed(){
+
+  void _accountPressed(){
     //hủy focus vào textfield
     FocusScope.of(context).requestFocus(new FocusNode());
     WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
-          title: 'Toan',
-          description: 'Dai cuong',
-          info: '1+1=3',
-          iconData: Icons.school_outlined,
-          onLeftPressed: _deleteSubject,
-          onRightPressed: _addSubject,
+          title: 'Ten nguoi dung',
+          description: 'Loai tai khoan',
+          info: 'nguoi giu lang',
+          iconData: Icons.account_circle_outlined,
           leftButtonTitle: AppLocalizations.of(context)!.delete,
-          rightButtonTitle: AppLocalizations.of(context)!.edit,
+          rightButtonTitle: AppLocalizations.of(context)!.resetPassword,
+          onLeftPressed: _deleteAccount,
+          onRightPressed: _onResetPassword,
         );
       },
     );
-  }
 
-  void _addSubject(){
+  }
+  void _addAccount(){
     FocusScope.of(context).requestFocus(FocusNode());
     WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -49,28 +53,24 @@ class _SubjectState extends State<Subject> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: AddSubject(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
+          child: AddAccount(
+            onCancelPressed: (){},
+            onOkPressed: (){},
           ),
         );
       },
     );
   }
 
-  void _onCancelPressed(){
-    Navigator.pop(context);
-  }
-
-  Future<void> _onOkPressed() async{
+  Future<void> _deleteAccount() async {
 
   }
 
-  Future<void> _deleteSubject() async {
-
+  Future<void> _onResetPassword() async {
+    //
   }
 
-  Future<void> _onSubjectRefresh() async {
+  Future<void> _onAccountRefresh() async {
     //
   }
 
@@ -78,20 +78,20 @@ class _SubjectState extends State<Subject> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            AppLocalizations.of(context)!.subject,
-              style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-        ),
+          preferredSize: Size.fromHeight(70),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(
+              AppLocalizations.of(context)!.account,
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,fontFamily: Fonts.display_font,color: Colors.black),
+            ),
+            centerTitle: true,
+          )
       ),
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15.0,right: 15),
+          padding: const EdgeInsets.only(right: 15.0,left: 15.0),
           child: Column(
             children: [
               TextFormField(
@@ -116,33 +116,27 @@ class _SubjectState extends State<Subject> {
               ),
               SizedBox(height: 15),
               RefreshIndicator(
-                onRefresh: _onSubjectRefresh,
+                onRefresh: _onAccountRefresh,
                 child: Scrollbar(
                     thumbVisibility: true,
                     radius: Radius.circular(8),
                     child: SingleChildScrollView(
-                        child: InfoCard(
-                          title: 'Toan',
-                          description: 'Dai Cuong',
-                          iconData: Icons.school_outlined,
-                          onPressed: _onSubjectPressed,
-                        )
+                      child: InfoCard(title: "Ten nguoi dung 2", description: "Loại người dùng", iconData: Icons.account_circle_outlined, onPressed:_accountPressed),
                     )
                 ),
               )
             ],
-
           ),
         ),
-
-
       ),
+
+
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.indigo,
         elevation: 0,
         shape: CircleBorder(),
         child: Icon(Icons.add_rounded, color: Colors.white),
-        onPressed: _addSubject,
+        onPressed: _addAccount,
       ),
     );
   }

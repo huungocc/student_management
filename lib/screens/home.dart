@@ -23,7 +23,18 @@ class _HomeState extends State<Home> {
   }
 
   void _onSchedulePressed() {
-    //
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: ScheduleSubject(),
+        );
+      },
+    );
   }
 
   void _onSubjectPressed() {
@@ -31,9 +42,8 @@ class _HomeState extends State<Home> {
   }
 
   void _onClassPressed() {
-
+    //
   }
-
 
   void _onInfoPressed() {
     showModalBottomSheet(
@@ -62,7 +72,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onUserPressed() {
-
+  Navigator.pushNamed(context, Routes.account);
   }
 
   void _onSettingPressed(BuildContext context) {

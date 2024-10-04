@@ -4,3 +4,4 @@ export 'info_screen.dart';
 export 'edit_noti.dart';
 export 'user_screen.dart';
 export 'schedule_in_day.dart';
+export 'schedule_subject.dart';

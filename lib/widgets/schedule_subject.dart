@@ -20,7 +20,7 @@ class _ScheduleSubjectState extends State<ScheduleSubject> {
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
          child: Padding(
-           padding: const EdgeInsets.all(30.0),
+           padding: const EdgeInsets.fromLTRB(15, 20, 20, 15),
            child: Column(
              children: [
               Text(
