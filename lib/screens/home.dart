@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onClassPressed() {
-    //
+    Navigator.pushNamed(context, Routes.classes);
   }
 
   void _onInfoPressed() {
@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
   }
 
   void _onUserPressed() {
-  Navigator.pushNamed(context, Routes.account);
+    Navigator.pushNamed(context, Routes.account);
   }
 
   void _onSettingPressed(BuildContext context) {
@@ -121,11 +121,18 @@ class _HomeState extends State<Home> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.welcome,
-                              style: TextStyle(color: Colors.white, fontSize: 28, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontFamily: Fonts.display_font,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'Nguyễn Hữu Ngọc',
-                              style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: Fonts.display_font),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: Fonts.display_font),
                             ),
                           ],
                         ),
@@ -146,54 +153,53 @@ class _HomeState extends State<Home> {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      InfoCard(
-                        title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                        description: 'dd/mm/yyyy',
-                        iconData: Icons.notifications_active_outlined,
-                        bgColor: Colors.teal,
-                        elColor: Colors.white,
-                        onPressed: _onNotiPressed,
+                  child: Column(children: [
+                    InfoCard(
+                      title:
+                          'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+                      description: 'dd/mm/yyyy',
+                      iconData: Icons.notifications_active_outlined,
+                      bgColor: Colors.teal,
+                      elColor: Colors.white,
+                      onPressed: _onNotiPressed,
+                    ),
+                    InfoCard(
+                      title: 'Tên lớp học',
+                      description: 'Ca 1 101-A2',
+                      iconData: Icons.schedule_outlined,
+                      bgColor: Colors.cyan[600],
+                      elColor: Colors.white,
+                      onPressed: _onSchedulePressed,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          FunctionCard(
+                            title: AppLocalizations.of(context)!.subject,
+                            iconData: Icons.school_outlined,
+                            bgColor: Colors.red,
+                            elColor: Colors.white,
+                            onPressed: _onSubjectPressed,
+                          ),
+                          FunctionCard(
+                            title: AppLocalizations.of(context)!.classes,
+                            iconData: Icons.calendar_month_outlined,
+                            bgColor: Colors.orange,
+                            elColor: Colors.white,
+                            onPressed: _onClassPressed,
+                          ),
+                          FunctionCard(
+                            title: AppLocalizations.of(context)!.account,
+                            iconData: Icons.people_alt_outlined,
+                            bgColor: Colors.indigo,
+                            elColor: Colors.white,
+                            onPressed: _onUserPressed,
+                          ),
+                        ],
                       ),
-                      InfoCard(
-                        title: 'Tên lớp học',
-                        description: 'Ca 1 101-A2',
-                        iconData: Icons.schedule_outlined,
-                        bgColor: Colors.cyan[600],
-                        elColor: Colors.white,
-                        onPressed: _onSchedulePressed,
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            FunctionCard(
-                              title: AppLocalizations.of(context)!.subject,
-                              iconData: Icons.school_outlined,
-                              bgColor: Colors.red,
-                              elColor: Colors.white,
-                              onPressed: _onSubjectPressed,
-                            ),
-                            FunctionCard(
-                              title: AppLocalizations.of(context)!.classes,
-                              iconData: Icons.calendar_month_outlined,
-                              bgColor: Colors.orange,
-                              elColor: Colors.white,
-                              onPressed: _onClassPressed,
-                            ),
-                            FunctionCard(
-                              title: AppLocalizations.of(context)!.account,
-                              iconData: Icons.people_alt_outlined,
-                              bgColor: Colors.indigo,
-                              elColor: Colors.white,
-                              onPressed: _onUserPressed,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]
-                  ),
+                    ),
+                  ]),
                 ),
               ),
             )
@@ -207,15 +213,17 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
-              onTap: () {
-                _onInfoPressed();
-              },
-              child: Icon(Icons.edit_note_outlined, color: Colors.grey[800], size: 30)),
+                onTap: () {
+                  _onInfoPressed();
+                },
+                child: Icon(Icons.edit_note_outlined,
+                    color: Colors.grey[800], size: 30)),
             GestureDetector(
-              onTap: () {
-                _onSettingPressed(context);
-              },
-              child: Icon(Icons.settings_outlined, color: Colors.grey[800], size: 30)),
+                onTap: () {
+                  _onSettingPressed(context);
+                },
+                child: Icon(Icons.settings_outlined,
+                    color: Colors.grey[800], size: 30)),
           ],
         ),
       ),

@@ -15,14 +15,17 @@ class _NotifState extends State<Notif> {
   void _onNotifPressed() {
     //hủy focus vào textfield
     FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
-          title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+          title:
+              'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
           description: 'dd/mm/yyyy',
-          info: 'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
+          info:
+              'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
           iconData: Icons.notifications_active_outlined,
           leftButtonTitle: AppLocalizations.of(context)!.delete,
           rightButtonTitle: AppLocalizations.of(context)!.edit,
@@ -35,7 +38,8 @@ class _NotifState extends State<Notif> {
 
   void _addNotif() {
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
@@ -83,7 +87,11 @@ class _NotifState extends State<Notif> {
           backgroundColor: Colors.white,
           title: Text(
             AppLocalizations.of(context)!.notif,
-            style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontFamily: Fonts.display_font,
+                fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -97,11 +105,16 @@ class _NotifState extends State<Notif> {
               TextFormField(
                 controller: _controllerSearch,
                 cursorColor: Colors.black87,
-                style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontFamily: Fonts.display_font),
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                   hintText: AppLocalizations.of(context)!.search,
-                  hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                  hintStyle: TextStyle(
+                      color: Colors.black26, fontFamily: Fonts.display_font),
                   prefixIcon: const Icon(Icons.search_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -118,17 +131,16 @@ class _NotifState extends State<Notif> {
               RefreshIndicator(
                 onRefresh: _onNotifRefresh,
                 child: Scrollbar(
-                  thumbVisibility: true,
-                  radius: Radius.circular(8),
-                  child: SingleChildScrollView(
-                    child: InfoCard(
-                      title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+                    thumbVisibility: true,
+                    radius: Radius.circular(8),
+                    child: SingleChildScrollView(
+                        child: InfoCard(
+                      title:
+                          'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
                       description: 'dd/mm/yyyy',
                       iconData: Icons.notifications_active_outlined,
                       onPressed: _onNotifPressed,
-                    )
-                  )
-                ),
+                    ))),
               )
             ],
           ),

@@ -37,6 +37,7 @@ class ScheduleInDay extends StatelessWidget {
         ),
         //Todo: ListViewBuilder
         InfoCard(title: "Tên lớp học", description: "101-A2", iconData: Icons.schedule, onPressed: (){}),
+
       ],
     );
   }

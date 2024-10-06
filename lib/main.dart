@@ -4,7 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:student_management/managers/manager.dart';
+import 'package:student_management/screens/classname.dart';
 import 'package:student_management/screens/account.dart';
+import 'package:student_management/screens/classes.dart';
 import 'package:student_management/screens/notif.dart';
 import 'screens/screen.dart';
 
@@ -29,7 +31,10 @@ class MyApp extends StatelessWidget {
               Routes.home: (context) => Home(),
               Routes.notif: (context) => Notif(),
               Routes.subject: (context) => Subject(),
-              Routes.account: (context) => Account()
+              Routes.account: (context) => Account(),
+              Routes.classes: (context) => Classes(),
+              Routes.classmame: (context) => Classname()
+
             },
             localizationsDelegates: [
               AppLocalizations.delegate,

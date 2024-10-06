@@ -29,7 +29,7 @@ class _ScheduleSubjectState extends State<ScheduleSubject> {
                ),
               Text("dd/mm/yyyy - dd/mm/yyyy"),
               SizedBox(height: 30),
-             ScheduleInDay(
+               ScheduleInDay(
                dayInWeek: 'Thứ 2',
                date: 'dd/mm/yyyy',
                loadSchedule: () {},

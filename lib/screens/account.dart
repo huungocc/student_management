@@ -6,7 +6,6 @@ import 'package:student_management/widgets/info_screen.dart';
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
 
-
 class Account extends StatefulWidget {
   const Account({super.key});
 
@@ -14,15 +13,14 @@ class Account extends StatefulWidget {
   State<Account> createState() => _AccountState();
 }
 
-
 class _AccountState extends State<Account> {
   final TextEditingController _controllerSearch = TextEditingController();
 
-
-  void _accountPressed(){
+  void _accountPressed() {
     //hủy focus vào textfield
     FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
@@ -39,11 +37,12 @@ class _AccountState extends State<Account> {
         );
       },
     );
-
   }
-  void _addAccount(){
+
+  void _addAccount() {
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
@@ -54,17 +53,15 @@ class _AccountState extends State<Account> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: AddAccount(
-            onCancelPressed: (){},
-            onOkPressed: (){},
+            onCancelPressed: () {},
+            onOkPressed: () {},
           ),
         );
       },
     );
   }
 
-  Future<void> _deleteAccount() async {
-
-  }
+  Future<void> _deleteAccount() async {}
 
   Future<void> _onResetPassword() async {
     //
@@ -83,25 +80,33 @@ class _AccountState extends State<Account> {
             backgroundColor: Colors.white,
             title: Text(
               AppLocalizations.of(context)!.account,
-              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,fontFamily: Fonts.display_font,color: Colors.black),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontFamily: Fonts.display_font,
+                  color: Colors.black),
             ),
             centerTitle: true,
-          )
-      ),
+          )),
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(right: 15.0,left: 15.0),
+          padding: const EdgeInsets.only(right: 15.0, left: 15.0),
           child: Column(
             children: [
               TextFormField(
                 controller: _controllerSearch,
                 cursorColor: Colors.black87,
-                style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontFamily: Fonts.display_font),
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                   hintText: AppLocalizations.of(context)!.search,
-                  hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                  hintStyle: TextStyle(
+                      color: Colors.black26, fontFamily: Fonts.display_font),
                   prefixIcon: const Icon(Icons.search_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -121,16 +126,17 @@ class _AccountState extends State<Account> {
                     thumbVisibility: true,
                     radius: Radius.circular(8),
                     child: SingleChildScrollView(
-                      child: InfoCard(title: "Ten nguoi dung 2", description: "Loại người dùng", iconData: Icons.account_circle_outlined, onPressed:_accountPressed),
-                    )
-                ),
+                      child: InfoCard(
+                          title: "Ten nguoi dung 2",
+                          description: "Loại người dùng",
+                          iconData: Icons.account_circle_outlined,
+                          onPressed: _accountPressed),
+                    )),
               )
             ],
           ),
         ),
       ),
-
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.indigo,
         elevation: 0,
