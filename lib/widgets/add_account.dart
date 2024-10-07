@@ -14,7 +14,6 @@ class AddAccount extends StatefulWidget {
     required this.onOkPressed,
   }) : super(key: key);
 
-
   @override
   State<AddAccount> createState() => _EditNotiState();
 }
@@ -22,7 +21,8 @@ class AddAccount extends StatefulWidget {
 class _EditNotiState extends State<AddAccount> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerConfirmPassword = TextEditingController();
+  final TextEditingController _controllerConfirmPassword =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,8 @@ class _EditNotiState extends State<AddAccount> {
               controller: _controllerEmail,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   color: Colors.black87,
                   fontFamily: Fonts.display_font),
               decoration: InputDecoration(
@@ -64,8 +64,8 @@ class _EditNotiState extends State<AddAccount> {
               controller: _controllerPassword,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   color: Colors.black87,
                   fontFamily: Fonts.display_font),
               decoration: InputDecoration(
@@ -91,8 +91,8 @@ class _EditNotiState extends State<AddAccount> {
               controller: _controllerConfirmPassword,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   color: Colors.black87,
                   fontFamily: Fonts.display_font),
               decoration: InputDecoration(
@@ -118,7 +118,8 @@ class _EditNotiState extends State<AddAccount> {
               isExpanded: true,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.accountType,
-                labelStyle: TextStyle(fontSize: 16,
+                labelStyle: TextStyle(
+                    fontSize: 16,
                     color: Colors.black87,
                     fontFamily: Fonts.display_font),
                 hintText: AppLocalizations.of(context)!.accountType,
@@ -134,17 +135,18 @@ class _EditNotiState extends State<AddAccount> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-
-              items: _accountType.map((item) =>
-                  DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: TextStyle(fontSize: 18,
-                          color: Colors.black87,
-                          fontFamily: Fonts.display_font),
-                    ),
-                  )).toList(),
+              items: _accountType
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                              fontFamily: Fonts.display_font),
+                        ),
+                      ))
+                  .toList(),
               onChanged: (value) {
                 //
               },
@@ -181,12 +183,11 @@ class _EditNotiState extends State<AddAccount> {
                 ),
               ),
               onPressed: widget.onOkPressed,
-              child: Text(
-                  AppLocalizations.of(context)!.create,
-                  style: TextStyle(color: Colors.white,
+              child: Text(AppLocalizations.of(context)!.create,
+                  style: TextStyle(
+                      color: Colors.white,
                       fontFamily: Fonts.display_font,
-                      fontSize: 16)
-              ),
+                      fontSize: 16)),
             ),
             SizedBox(height: 20)
           ],

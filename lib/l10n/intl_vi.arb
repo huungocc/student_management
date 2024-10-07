@@ -34,5 +34,12 @@
   "resetPassword": "Đặt lại",
   "passwordConfirm": "Xác nhận mật khẩu",
   "create": "Tạo",
-  "accountType": "Loại tài khoản"
+  "accountType": "Loại tài khoản",
+  "nameClass": "Tên Lớp học",
+  "teacher": "Giảng viên",
+  "student": "Sinh viên",
+  "classes": "Lớp học",
+  "timeStart": "Thời gian bắt đầu",
+  "classroom": "Phòng học"
+
 }

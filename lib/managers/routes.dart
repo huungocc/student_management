@@ -6,4 +6,6 @@ class Routes{
   static const String notif = '/notif';
   static const String subject = '/subject';
   static const String account = '/account';
+  static const String classes = '/classes';
+  static const String classmame = '/classname';
 }
