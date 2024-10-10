@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_management/main.dart';
-import 'package:student_management/widgets/info_card.dart';
 import 'package:student_management/widgets/widget.dart';
 class ScheduleSubject extends StatefulWidget {
   const ScheduleSubject(
@@ -29,7 +27,7 @@ class _ScheduleSubjectState extends State<ScheduleSubject> {
                ),
               Text("dd/mm/yyyy - dd/mm/yyyy"),
               SizedBox(height: 30),
-             ScheduleInDay(
+               ScheduleInDay(
                dayInWeek: 'Thứ 2',
                date: 'dd/mm/yyyy',
                loadSchedule: () {},

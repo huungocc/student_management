@@ -34,5 +34,11 @@
   "resetPassword": "Reset",
   "passwordConfirm": "Password Confirm",
   "create": "Create",
-  "accountType": "Account type"
+  "accountType": "    Account type",
+  "nameClass": "Name class",
+  "teacher": "Teacher",
+  "student": "Student",
+  "timeStart": "Start Day",
+  "classroom": "CLassroom",
+  "chooseSubject": "    Choose subject"
 }

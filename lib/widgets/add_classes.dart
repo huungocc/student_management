@@ -3,37 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import '../managers/manager.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import '../managers/constants.dart';
 
-class UserScreen extends StatefulWidget {
+import '../managers/manager.dart';
+import '../widgets/widget.dart';
+
+
+class AddClasses extends StatefulWidget {
   final VoidCallback onCancelPressed;
   final VoidCallback onOkPressed;
-  final VoidCallback onChangePasswordPressed;
+  final VoidCallback onAddMemberPressed;
 
-  const UserScreen({
+  const AddClasses({
     Key? key,
     required this.onCancelPressed,
     required this.onOkPressed,
-    required this.onChangePasswordPressed
+    required this.onAddMemberPressed
   }) : super(key: key);
 
+
   @override
-  State<UserScreen> createState() => _UserScreenState();
+  State<AddClasses> createState() => _AddClasses();
 }
 
-class _UserScreenState extends State<UserScreen> {
-  final TextEditingController _controllerName = TextEditingController();
-  final TextEditingController _controllerCountry = TextEditingController();
-  final TextEditingController _controllerAddress = TextEditingController();
-  final TextEditingController _controllerPhone = TextEditingController();
-
-  final List<String> sexItems = [
-    'Nam',
-    'Nữ',
-  ];
-  String currentUserSex = 'Nam';
+class _AddClasses extends State<AddClasses> {
+  final TextEditingController _controllerClassName = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
 
@@ -59,25 +53,28 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final List<String> _tinchi = ['1', '2', '3'];
+    final List<String> _loaimon = ['Đại cương', 'Chuyên ngành'];
+
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: _controllerName,
+              controller: _controllerClassName,
               cursorColor: Colors.black87,
-              keyboardType: TextInputType.name,
+              keyboardType: TextInputType.text,
               style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: AppLocalizations.of(context)!.fullName,
+                labelText: AppLocalizations.of(context)!.nameClass,
                 labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.fullName,
+                hintText: AppLocalizations.of(context)!.subjectName,
                 hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -91,29 +88,30 @@ class _UserScreenState extends State<UserScreen> {
             ),
             SizedBox(height: 15),
             DropdownButtonFormField2<String>(
-              value: currentUserSex,
-              isExpanded: true,
               decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.chooseSubject,
+                labelStyle: TextStyle(fontSize: 16,color: Colors.black87, fontFamily: Fonts.display_font),
                 contentPadding: EdgeInsets.symmetric(vertical: 11),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black87, width: 2.0),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              items: sexItems.map((item) => DropdownMenuItem<String>(
+              items: _tinchi.map((item) => DropdownMenuItem<String>(
                 value: item,
                 child: Text(
                   item,
-                  style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
+                  style: TextStyle(fontSize: 18, color: Colors.black87, fontFamily: Fonts.display_font),
                 ),
               )).toList(),
               onChanged: (value) {
-                //Todo: Đổi giới tính
+                //
               },
-              buttonStyleData: ButtonStyleData(padding: EdgeInsets.only(right: 8)),
+              buttonStyleData: ButtonStyleData(
+                padding: EdgeInsets.only(right: 8),
+              ),
               iconStyleData: IconStyleData(
                 icon: Icon(Icons.arrow_drop_down, color: Colors.black87),
                 iconSize: 30,
@@ -122,7 +120,7 @@ class _UserScreenState extends State<UserScreen> {
                 offset: Offset(0, -5),
                 elevation: 0,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(30),
                   color: Colors.grey[300],
                 ),
               ),
@@ -157,72 +155,62 @@ class _UserScreenState extends State<UserScreen> {
               ),
             ),
             SizedBox(height: 15),
-            TextField(
-              controller: _controllerCountry,
-              cursorColor: Colors.black87,
-              keyboardType: TextInputType.streetAddress,
-              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: AppLocalizations.of(context)!.country,
-                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.country,
-                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
-                border: OutlineInputBorder(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                minimumSize: Size(double.infinity, 50),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
+                  side: BorderSide(color: Colors.black, width: 1),
                 ),
-                enabledBorder: OutlineInputBorder(
+              ),
+              onPressed: widget.onAddMemberPressed,
+              child: Text(
+                  'Các buổi trong tuần, ca học',
+                  style: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font, fontSize: 16)
+              ),
+            ),
+            SizedBox(height: 15),
+            DropdownButtonFormField2<String>(
+              decoration: InputDecoration(
+                labelText: '    Chọn phòng học',
+                labelStyle: TextStyle(fontSize: 16,color: Colors.black87, fontFamily: Fonts.display_font),
+                contentPadding: EdgeInsets.symmetric(vertical: 11),
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-            ),
-            SizedBox(height: 15),
-            TextField(
-              controller: _controllerAddress,
-              cursorColor: Colors.black87,
-              keyboardType: TextInputType.streetAddress,
-              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: AppLocalizations.of(context)!.address,
-                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.address,
-                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+              items: _tinchi.map((item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: TextStyle(fontSize: 18, color: Colors.black87, fontFamily: Fonts.display_font),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+              )).toList(),
+              onChanged: (value) {
+                //
+              },
+              buttonStyleData: ButtonStyleData(
+                padding: EdgeInsets.only(right: 8),
+              ),
+              iconStyleData: IconStyleData(
+                icon: Icon(Icons.arrow_drop_down, color: Colors.black87),
+                iconSize: 30,
+              ),
+              dropdownStyleData: DropdownStyleData(
+                offset: Offset(0, -5),
+                elevation: 0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.grey[300],
                 ),
               ),
-            ),
-            SizedBox(height: 15),
-            TextField(
-              controller: _controllerPhone,
-              cursorColor: Colors.black87,
-              keyboardType: TextInputType.phone,
-              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: AppLocalizations.of(context)!.phone,
-                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.phone,
-                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+              menuItemStyleData: MenuItemStyleData(
+                padding: EdgeInsets.symmetric(horizontal: 16),
               ),
             ),
             SizedBox(height: 15),
@@ -236,15 +224,14 @@ class _UserScreenState extends State<UserScreen> {
                   side: BorderSide(color: Colors.black, width: 1),
                 ),
               ),
-              onPressed: widget.onChangePasswordPressed,
+              onPressed: widget.onAddMemberPressed,
               child: Text(
-                  'Đổi mật khẩu',
+                  'Thành viên',
                   style: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font, fontSize: 16)
               ),
             ),
             SizedBox(height: 15),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -265,7 +252,7 @@ class _UserScreenState extends State<UserScreen> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(130, 30),
-                    backgroundColor: Colors.black87,
+                    backgroundColor: Colors.teal,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:student_management/widgets/widget.dart';
-
 import '../managers/manager.dart';
 
 class ScheduleInDay extends StatelessWidget {

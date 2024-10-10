@@ -37,7 +37,7 @@ class AuthService {
       // Lưu thông tin người dùng vào Firestore với role
       await _firestore.collection('users').doc(userCredential.user?.uid).set({
         'email': email,
-        'role': role,  // role: 'admin', 'student', 'instructor'
+        'role': role,  // role: 'admin', 'student', 'teacher'
       });
 
       return userCredential.user;

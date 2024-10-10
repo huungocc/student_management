@@ -14,7 +14,6 @@ class AddAccount extends StatefulWidget {
     required this.onOkPressed,
   }) : super(key: key);
 
-
   @override
   State<AddAccount> createState() => _EditNotiState();
 }
@@ -23,6 +22,9 @@ class _EditNotiState extends State<AddAccount> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final TextEditingController _controllerConfirmPassword = TextEditingController();
+
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +39,8 @@ class _EditNotiState extends State<AddAccount> {
               controller: _controllerEmail,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   color: Colors.black87,
                   fontFamily: Fonts.display_font),
               decoration: InputDecoration(
@@ -63,18 +65,24 @@ class _EditNotiState extends State<AddAccount> {
             TextField(
               controller: _controllerPassword,
               cursorColor: Colors.black87,
-              keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
-                  color: Colors.black87,
-                  fontFamily: Fonts.display_font),
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: _obscurePassword,
+              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.password,
-                labelStyle: TextStyle(
-                    color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.password,
-                hintStyle: TextStyle(
-                    color: Colors.black26, fontFamily: Fonts.display_font),
+                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                labelText: 'Mật khẩu',
+                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
+                hintText: 'Mật khẩu',
+                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                    icon: _obscurePassword
+                        ? const Icon(Icons.visibility_outlined)
+                        : const Icon(Icons.visibility_off_outlined)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -90,18 +98,24 @@ class _EditNotiState extends State<AddAccount> {
             TextField(
               controller: _controllerConfirmPassword,
               cursorColor: Colors.black87,
-              keyboardType: TextInputType.text,
-
-              style: TextStyle(fontSize: 16,
-                  color: Colors.black87,
-                  fontFamily: Fonts.display_font),
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: _obscureConfirmPassword,
+              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.passwordConfirm,
-                labelStyle: TextStyle(
-                    color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: AppLocalizations.of(context)!.passwordConfirm,
-                hintStyle: TextStyle(
-                    color: Colors.black26, fontFamily: Fonts.display_font),
+                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                labelText: 'Xác nhận mật khẩu',
+                labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
+                hintText: 'Xác nhận mật khẩu',
+                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                    icon: _obscureConfirmPassword
+                        ? const Icon(Icons.visibility_outlined)
+                        : const Icon(Icons.visibility_off_outlined)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -118,9 +132,11 @@ class _EditNotiState extends State<AddAccount> {
               isExpanded: true,
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.accountType,
-                labelStyle: TextStyle(fontSize: 16,
+                labelStyle: TextStyle(
+                    fontSize: 16,
                     color: Colors.black87,
                     fontFamily: Fonts.display_font),
+                contentPadding: EdgeInsets.symmetric(vertical: 11),
                 hintText: AppLocalizations.of(context)!.accountType,
                 hintStyle: TextStyle(
                     color: Colors.black26, fontFamily: Fonts.display_font),
@@ -134,17 +150,18 @@ class _EditNotiState extends State<AddAccount> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-
-              items: _accountType.map((item) =>
-                  DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: TextStyle(fontSize: 18,
-                          color: Colors.black87,
-                          fontFamily: Fonts.display_font),
-                    ),
-                  )).toList(),
+              items: _accountType
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                              fontFamily: Fonts.display_font),
+                        ),
+                      ))
+                  .toList(),
               onChanged: (value) {
                 //
               },
@@ -181,12 +198,11 @@ class _EditNotiState extends State<AddAccount> {
                 ),
               ),
               onPressed: widget.onOkPressed,
-              child: Text(
-                  AppLocalizations.of(context)!.create,
-                  style: TextStyle(color: Colors.white,
+              child: Text(AppLocalizations.of(context)!.create,
+                  style: TextStyle(
+                      color: Colors.white,
                       fontFamily: Fonts.display_font,
-                      fontSize: 16)
-              ),
+                      fontSize: 16)),
             ),
             SizedBox(height: 20)
           ],

@@ -16,10 +16,11 @@ class _SubjectState extends State<Subject> {
   final TextEditingController _controllerSearch = TextEditingController();
 
   //-------su kien--------------
-  void _onSubjectPressed(){
+  void _onSubjectPressed() {
     //hủy focus vào textfield
     FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -37,9 +38,10 @@ class _SubjectState extends State<Subject> {
     );
   }
 
-  void _addSubject(){
+  void _addSubject() {
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
@@ -58,17 +60,13 @@ class _SubjectState extends State<Subject> {
     );
   }
 
-  void _onCancelPressed(){
+  void _onCancelPressed() {
     Navigator.pop(context);
   }
 
-  Future<void> _onOkPressed() async{
+  Future<void> _onOkPressed() async {}
 
-  }
-
-  Future<void> _deleteSubject() async {
-
-  }
+  Future<void> _deleteSubject() async {}
 
   Future<void> _onSubjectRefresh() async {
     //
@@ -83,7 +81,11 @@ class _SubjectState extends State<Subject> {
           backgroundColor: Colors.white,
           title: Text(
             AppLocalizations.of(context)!.subject,
-              style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontFamily: Fonts.display_font,
+                fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -91,17 +93,22 @@ class _SubjectState extends State<Subject> {
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15.0,right: 15),
+          padding: const EdgeInsets.only(left: 15.0, right: 15),
           child: Column(
             children: [
               TextFormField(
                 controller: _controllerSearch,
                 cursorColor: Colors.black87,
-                style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontFamily: Fonts.display_font),
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                   hintText: AppLocalizations.of(context)!.search,
-                  hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                  hintStyle: TextStyle(
+                      color: Colors.black26, fontFamily: Fonts.display_font),
                   prefixIcon: const Icon(Icons.search_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -122,20 +129,15 @@ class _SubjectState extends State<Subject> {
                     radius: Radius.circular(8),
                     child: SingleChildScrollView(
                         child: InfoCard(
-                          title: 'Toan',
-                          description: 'Dai Cuong',
-                          iconData: Icons.school_outlined,
-                          onPressed: _onSubjectPressed,
-                        )
-                    )
-                ),
+                      title: 'Toan',
+                      description: 'Dai Cuong',
+                      iconData: Icons.school_outlined,
+                      onPressed: _onSubjectPressed,
+                    ))),
               )
             ],
-
           ),
         ),
-
-
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,

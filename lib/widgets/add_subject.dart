@@ -15,10 +15,10 @@ class AddSubject extends StatefulWidget {
 
 
   @override
-  State<AddSubject> createState() => _EditNotiState();
+  State<AddSubject> createState() => _AddSubject();
 }
 
-class _EditNotiState extends State<AddSubject> {
+class _AddSubject extends State<AddSubject> {
   final TextEditingController _controllerSubjectName = TextEditingController();
   final TextEditingController _controllerContent = TextEditingController();
   final TextEditingController _controllerNumberOfDays = TextEditingController();
@@ -193,7 +193,7 @@ class _EditNotiState extends State<AddSubject> {
             ),
             SizedBox(height: 15),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(

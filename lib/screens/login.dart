@@ -31,12 +31,12 @@ class _LoginState extends State<Login> {
     FocusScope.of(context).unfocus();
 
     // Đăng nhập
-    User? user = await _authService.signInWithEmailAndPassword(context, email, password);
+    User? user =
+        await _authService.signInWithEmailAndPassword(context, email, password);
     if (user != null) {
       Navigator.pushReplacementNamed(context, Routes.home);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,11 @@ class _LoginState extends State<Login> {
                       children: [
                         Text(
                           AppLocalizations.of(context)!.app_name,
-                          style: TextStyle(color: Colors.black87, fontSize: 35, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 35,
+                              fontFamily: Fonts.display_font,
+                              fontWeight: FontWeight.bold),
                         ),
                         Spacer(),
                         Icon(Icons.account_balance_rounded, size: 30)
@@ -83,7 +87,9 @@ class _LoginState extends State<Login> {
                       cursorColor: Colors.black87,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.email,
-                        labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
+                        labelStyle: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: Fonts.display_font),
                         prefixIcon: const Icon(Icons.mail_outline_rounded),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -93,10 +99,12 @@ class _LoginState extends State<Login> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.black87, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.black87, width: 2.0),
                         ),
                       ),
-                      onEditingComplete: () => _focusNodePassword.requestFocus(),
+                      onEditingComplete: () =>
+                          _focusNodePassword.requestFocus(),
                       //Todo: check email
                       // validator: (String? value) {
                       //   // if (value == null || value.isEmpty) {
@@ -116,7 +124,9 @@ class _LoginState extends State<Login> {
                       cursorColor: Colors.black87,
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.password,
-                        labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
+                        labelStyle: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: Fonts.display_font),
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                             onPressed: () {
@@ -135,9 +145,9 @@ class _LoginState extends State<Login> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.black87, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.black87, width: 2.0),
                         ),
-
                       ),
                       //Todo: Check password
                       // validator: (String? value) {
@@ -163,10 +173,10 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onPressed: _signIn,
-                          child: Text(
-                              AppLocalizations.of(context)!.login,
-                              style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font)
-                          ),
+                          child: Text(AppLocalizations.of(context)!.login,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: Fonts.display_font)),
                         ),
                       ],
                     ),
