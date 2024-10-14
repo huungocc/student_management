@@ -1,18 +1,12 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/rendering.dart';
 import '../managers/manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../services/service.dart';
+import 'widget.dart';
 
 class AddAccount extends StatefulWidget {
-  final VoidCallback onCancelPressed;
-  final VoidCallback onOkPressed;
-
-  const AddAccount({
-    Key? key,
-    required this.onCancelPressed,
-    required this.onOkPressed,
-  }) : super(key: key);
 
   @override
   State<AddAccount> createState() => _EditNotiState();
@@ -26,16 +20,53 @@ class _EditNotiState extends State<AddAccount> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
+  final _authService = AuthService();
+  String _selectedRole = '';
+
+  Future<void> _signup() async {
+    String email = _controllerEmail.text.trim();
+    String password = _controllerPassword.text.trim();
+    String confirm = _controllerPassword.text.trim();
+    String role = '';
+
+    if (email.isNotEmpty && !Validator.validateEmail(email)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongEmail,
+      );
+    } else if (password.isNotEmpty && !Validator.validatePassword(password)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongPassword,
+      );
+    } else if (confirm != password) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongConfirm,
+      );
+    } else if (email.isEmpty || password.isEmpty || confirm.isEmpty || _selectedRole.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else {
+      if (_selectedRole == AppLocalizations.of(context)!.admin) role = UserRole.admin;
+      if (_selectedRole == AppLocalizations.of(context)!.teacher) role = UserRole.teacher;
+      if (_selectedRole == AppLocalizations.of(context)!.student) role = UserRole.student;
+      await _authService.signUpWithEmailAndPassword(context, email, password, role);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> _accountType = ['sinh vien', 'giang vien', 'admin'];
+    final List<String> _accountType = [AppLocalizations.of(context)!.admin, AppLocalizations.of(context)!.teacher, AppLocalizations.of(context)!.student];
 
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
         child: Column(
           children: [
-            TextField(
+            TextFormField(
               controller: _controllerEmail,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
@@ -44,10 +75,11 @@ class _EditNotiState extends State<AddAccount> {
                   color: Colors.black87,
                   fontFamily: Fonts.display_font),
               decoration: InputDecoration(
-                labelText: "Email",
+                contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                labelText: AppLocalizations.of(context)!.email,
                 labelStyle: TextStyle(
                     color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: "Email",
+                hintText: AppLocalizations.of(context)!.email,
                 hintStyle: TextStyle(
                     color: Colors.black26, fontFamily: Fonts.display_font),
                 border: OutlineInputBorder(
@@ -62,7 +94,7 @@ class _EditNotiState extends State<AddAccount> {
               ),
             ),
             SizedBox(height: 15),
-            TextField(
+            TextFormField(
               controller: _controllerPassword,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.visiblePassword,
@@ -70,9 +102,9 @@ class _EditNotiState extends State<AddAccount> {
               style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: 'Mật khẩu',
+                labelText: AppLocalizations.of(context)!.password,
                 labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: 'Mật khẩu',
+                hintText: AppLocalizations.of(context)!.password,
                 hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                 suffixIcon: IconButton(
                     onPressed: () {
@@ -95,7 +127,7 @@ class _EditNotiState extends State<AddAccount> {
               ),
             ),
             SizedBox(height: 15),
-            TextField(
+            TextFormField(
               controller: _controllerConfirmPassword,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.visiblePassword,
@@ -103,9 +135,9 @@ class _EditNotiState extends State<AddAccount> {
               style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                labelText: 'Xác nhận mật khẩu',
+                labelText: AppLocalizations.of(context)!.passwordConfirm,
                 labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: 'Xác nhận mật khẩu',
+                hintText: AppLocalizations.of(context)!.passwordConfirm,
                 hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                 suffixIcon: IconButton(
                     onPressed: () {
@@ -151,19 +183,21 @@ class _EditNotiState extends State<AddAccount> {
                 ),
               ),
               items: _accountType
-                  .map((item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black87,
-                              fontFamily: Fonts.display_font),
-                        ),
-                      ))
-                  .toList(),
+                .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                          fontFamily: Fonts.display_font),
+                    ),
+                  ))
+                .toList(),
               onChanged: (value) {
-                //
+                setState(() {
+                  _selectedRole = value!;
+                });
               },
               buttonStyleData: ButtonStyleData(
                 padding: EdgeInsets.only(right: 8),
@@ -197,7 +231,7 @@ class _EditNotiState extends State<AddAccount> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: widget.onOkPressed,
+              onPressed: _signup,
               child: Text(AppLocalizations.of(context)!.create,
                   style: TextStyle(
                       color: Colors.white,

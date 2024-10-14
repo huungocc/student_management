@@ -12,7 +12,7 @@
   "welcome": "Xin chào,",
   "subject": "Môn học",
   "classes": "Lớp học",
-  "account": "Tài Khoản",
+  "account": "Tài khoản",
   "logout": "Đăng xuất",
   "notif": "Thông báo",
   "search": "Tìm kiếm",
@@ -40,5 +40,10 @@
   "student": "Sinh viên",
   "timeStart": "Ngày bắt đầu",
   "classroom": "Phòng học",
-  "chooseSubject": "    Chọn môn học"
+  "chooseSubject": "    Chọn môn học",
+  "admin": "Admin",
+  "wrongEmail": "Sai định dạng Email",
+  "wrongPassword": "Mật khẩu có tối thiểu 6 kí tự",
+  "wrongConfirm": "Mật khẩu xác nhận không trùng khớp",
+  "emptyInfo": "Vui lòng nhập đầy đủ thông tin"
 }

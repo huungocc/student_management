@@ -10,6 +10,8 @@ import 'package:student_management/screens/classes.dart';
 import 'package:student_management/screens/notif.dart';
 import 'screens/screen.dart';
 
+final GlobalKey<ScaffoldMessengerState> navigatorKey = GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LocaleProvider>(
         builder: (context, provider, child) {
           return MaterialApp(
+            scaffoldMessengerKey: navigatorKey,
             initialRoute: Routes.loading,
             routes: {
               Routes.loading: (context) => Loading(),
