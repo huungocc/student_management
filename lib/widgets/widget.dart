@@ -7,3 +7,5 @@ export 'schedule_in_day.dart';
 export 'schedule_subject.dart';
 export 'add_classes.dart';
 export 'change_password.dart';
+export 'dialog.dart';
+export 'add_account.dart';

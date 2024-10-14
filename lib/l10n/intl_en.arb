@@ -40,5 +40,10 @@
   "student": "Student",
   "timeStart": "Start Day",
   "classroom": "CLassroom",
-  "chooseSubject": "    Choose subject"
+  "chooseSubject": "    Choose subject",
+  "admin": "Admin",
+  "wrongEmail": "Invalid email format",
+  "wrongPassword": "Password must be at least 6 characters",
+  "wrongConfirm": "Confirm password does not match",
+  "emptyInfo": "Please fill all the information"
 }

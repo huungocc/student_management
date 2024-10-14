@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:student_management/widgets/add_account.dart';
-import 'package:student_management/widgets/info_screen.dart';
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
 
@@ -51,10 +49,7 @@ class _AccountState extends State<Account> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: AddAccount(
-            onCancelPressed: () {},
-            onOkPressed: () {},
-          ),
+          child: AddAccount(),
         );
       },
     );
