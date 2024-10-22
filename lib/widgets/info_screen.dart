@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../managers/manager.dart';
 import 'package:text_scroll/text_scroll.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InfoScreen extends StatefulWidget {
   final String title;

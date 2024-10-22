@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_management/widgets/function_card.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
 import '../widgets/widget.dart';

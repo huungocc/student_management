@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               Routes.subject: (context) => Subject(),
               Routes.account: (context) => Account(),
               Routes.classes: (context) => Classes(),
-              Routes.classmame: (context) => ClassName()
+              Routes.classname: (context) => ClassName()
 
             },
             localizationsDelegates: [

@@ -7,5 +7,5 @@ class Routes{
   static const String subject = '/subject';
   static const String account = '/account';
   static const String classes = '/classes';
-  static const String classmame = '/classname';
+  static const String classname = '/classname';
 }
