@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../managers/manager.dart';
 import '../services/service.dart';
+
 
 class Login extends StatefulWidget {
   const Login({
@@ -13,7 +13,6 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
-
 class _LoginState extends State<Login> {
   final AuthService _authService = AuthService();
 
@@ -199,3 +198,4 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 }
+

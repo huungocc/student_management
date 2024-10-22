@@ -9,3 +9,6 @@ export 'add_classes.dart';
 export 'change_password.dart';
 export 'dialog.dart';
 export 'add_account.dart';
+export 'add_subject.dart';
+export 'function_card.dart';
+

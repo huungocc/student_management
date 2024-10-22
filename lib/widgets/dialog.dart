@@ -30,7 +30,6 @@ class CustomDialogUtil {
         bool barrierDismissible = true,
         bool autoPopWhenPressSubmit = true,
         String? content,
-        String? subContent,
         String? titleCancel,
         bool hideCancel = false,
         String? titleSubmit}) {
@@ -207,7 +206,7 @@ class CustomDialog extends StatelessWidget {
                           Flexible(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
+                                backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: const BorderSide(color: Colors.black87),

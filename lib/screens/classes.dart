@@ -2,7 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:student_management/widgets/add_subject.dart';
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
 
@@ -21,7 +20,7 @@ class _ClassesState extends State<Classes> {
   final List<String> _monhoc = ['mon 1', 'mon 2', 'mon 3'];
 
   void _onClassesPressed(){
-    Navigator.pushNamed(context, Routes.classmame);
+    Navigator.pushNamed(context, Routes.classname);
   }
 
   void _addClass(){

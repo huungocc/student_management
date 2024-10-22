@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../main.dart';
 import '../widgets/widget.dart';
 
 class AuthService {
@@ -38,7 +36,7 @@ class AuthService {
   }
 
   // Đăng ký tài khoản với email, mật khẩu và role
-  Future<User?> signUpWithEmailAndPassword(BuildContext context, String email, String password, String role) async {
+  Future<User?> signUpWithEmailAndPassword(BuildContext context, String email, String password, String role, String userID) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -46,10 +44,11 @@ class AuthService {
       );
 
       // Lưu thông tin người dùng vào Firestore với role
-      await _firestore.collection(role).doc(userCredential.user?.uid).set({
+      await _firestore.collection(role).doc(email).set({
         'email': email,
         'default_password': password,
         'role': role,
+        'userID': userID
       });
 
       await CustomDialogUtil.showDialogNotification(
@@ -76,7 +75,7 @@ class AuthService {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.signOutFailed + ': $e'),
+          content: Text(AppLocalizations.of(context)!.signOutFailed),
         ),
       );
       throw e;

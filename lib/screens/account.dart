@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
+import '../services/service.dart';
 import '../widgets/widget.dart';
 
 class Account extends StatefulWidget {
@@ -13,6 +14,27 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final TextEditingController _controllerSearch = TextEditingController();
+  final AccountService _accountService = AccountService();
+  List<Map<String, dynamic>> adminData = [];
+  List<Map<String, dynamic>> teacherData = [];
+  List<Map<String, dynamic>> studentData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllUserData();
+  }
+
+  Future<void> loadAllUserData() async {
+    List<Map<String, dynamic>> loadedAdminData = await _accountService.loadAllUserDataByRole(context, 'admin');
+    List<Map<String, dynamic>> loadedTeacherData = await _accountService.loadAllUserDataByRole(context, 'teacher');
+    List<Map<String, dynamic>> loadedStudentData = await _accountService.loadAllUserDataByRole(context, 'student');
+    setState(() {
+      adminData = loadedAdminData;
+      teacherData = loadedTeacherData;
+      studentData = loadedStudentData;
+    });
+  }
 
   void _accountPressed() {
     FocusScope.of(context).requestFocus(new FocusNode());
@@ -62,7 +84,7 @@ class _AccountState extends State<Account> {
   }
 
   Future<void> _onAccountRefresh() async {
-    //
+    loadAllUserData();
   }
 
   @override
@@ -74,61 +96,114 @@ class _AccountState extends State<Account> {
             backgroundColor: Colors.white,
             title: Text(
               AppLocalizations.of(context)!.account,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  fontFamily: Fonts.display_font,
-                  color: Colors.black),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: Fonts.display_font, color: Colors.black),
             ),
             centerTitle: true,
           )),
       body: Container(
         color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _controllerSearch,
-                cursorColor: Colors.black87,
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    fontFamily: Fonts.display_font),
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                  hintText: AppLocalizations.of(context)!.search,
-                  hintStyle: TextStyle(
-                      color: Colors.black26, fontFamily: Fonts.display_font),
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+        padding: const EdgeInsets.only(right: 15.0, left: 15.0),
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _controllerSearch,
+              cursorColor: Colors.black87,
+              style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 13, horizontal: 15),
+                hintText: AppLocalizations.of(context)!.search,
+                hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
+                prefixIcon: const Icon(Icons.search_rounded),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              SizedBox(height: 15),
-              RefreshIndicator(
+            ),
+            SizedBox(height: 15),
+            Expanded(
+              child: RefreshIndicator(
                 onRefresh: _onAccountRefresh,
-                child: Scrollbar(
-                    thumbVisibility: true,
-                    radius: Radius.circular(8),
-                    child: SingleChildScrollView(
-                      child: InfoCard(
-                          title: "Ten nguoi dung 2",
-                          description: "Loại người dùng",
-                          iconData: Icons.account_circle_outlined,
-                          onPressed: _accountPressed),
-                    )),
-              )
-            ],
-          ),
+                child: ListView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  children: [
+                    ExpansionTile(
+                      title: Text(
+                          AppLocalizations.of(context)!.admin,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                      ),
+                      children: <Widget>[
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: adminData.length,
+                          itemBuilder: (context, index) {
+                            final admin = adminData[index];
+                            return InfoCard(
+                              title: admin['name'] ?? admin['email'],
+                              description: admin['role'] ?? 'Unknown Role',
+                              iconData: Icons.account_circle_outlined,
+                              onPressed: () {},
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    ExpansionTile(
+                      title: Text(
+                          AppLocalizations.of(context)!.teacher,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                      ),
+                      children: <Widget>[
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: teacherData.length,
+                          itemBuilder: (context, index) {
+                            final teacher = teacherData[index];
+                            return InfoCard(
+                              title: teacher['name'] ?? teacher['email'],
+                              description: teacher['role'] ?? 'Unknown Role',
+                              iconData: Icons.account_circle_outlined,
+                              onPressed: () {},
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    ExpansionTile(
+                      title: Text(
+                          AppLocalizations.of(context)!.student,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                      ),
+                      children: <Widget>[
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: studentData.length,
+                          itemBuilder: (context, index) {
+                            final student = studentData[index];
+                            return InfoCard(
+                              title: student['name'] ?? student['email'],
+                              description: student['role'] ?? 'Unknown Role',
+                              iconData: Icons.account_circle_outlined,
+                              onPressed: () {},
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
