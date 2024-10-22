@@ -130,17 +130,13 @@ class _NotifState extends State<Notif> {
               SizedBox(height: 15),
               RefreshIndicator(
                 onRefresh: _onNotifRefresh,
-                child: Scrollbar(
-                    thumbVisibility: true,
-                    radius: Radius.circular(8),
-                    child: SingleChildScrollView(
-                        child: InfoCard(
-                      title:
-                          'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                      description: 'dd/mm/yyyy',
-                      iconData: Icons.notifications_active_outlined,
-                      onPressed: _onNotifPressed,
-                    ))),
+                child: SingleChildScrollView(
+                  child: InfoCard(
+                  title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+                  description: 'dd/mm/yyyy',
+                  iconData: Icons.notifications_active_outlined,
+                  onPressed: _onNotifPressed,
+                )),
               )
             ],
           ),

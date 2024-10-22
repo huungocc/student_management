@@ -28,6 +28,7 @@ class _EditNotiState extends State<AddAccount> {
     String password = _controllerPassword.text.trim();
     String confirm = _controllerPassword.text.trim();
     String role = '';
+    String userID = email.split('@')[0];
 
     if (email.isNotEmpty && !Validator.validateEmail(email)) {
       await CustomDialogUtil.showDialogNotification(
@@ -53,7 +54,13 @@ class _EditNotiState extends State<AddAccount> {
       if (_selectedRole == AppLocalizations.of(context)!.admin) role = UserRole.admin;
       if (_selectedRole == AppLocalizations.of(context)!.teacher) role = UserRole.teacher;
       if (_selectedRole == AppLocalizations.of(context)!.student) role = UserRole.student;
-      await _authService.signUpWithEmailAndPassword(context, email, password, role);
+      await CustomDialogUtil.showDialogConfirm(
+        context,
+        content: 'Tạo tài khoản $_selectedRole\nID: $userID',
+        onSubmit: () async {
+          await _authService.signUpWithEmailAndPassword(context, email, password, role, userID);
+        }
+      );
     }
   }
 
