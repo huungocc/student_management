@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
 
+
 class Login extends StatefulWidget {
   const Login({
     Key? key,
@@ -12,7 +13,6 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
-
 class _LoginState extends State<Login> {
   final AuthService _authService = AuthService();
 
@@ -198,3 +198,4 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 }
+

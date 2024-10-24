@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import '../managers/manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../services/service.dart';

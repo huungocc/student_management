@@ -4,9 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-
 import '../managers/manager.dart';
-import '../widgets/widget.dart';
 
 
 class AddClasses extends StatefulWidget {
