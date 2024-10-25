@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
+import '../widgets/widget.dart';
 
 
 class Login extends StatefulWidget {
@@ -30,10 +31,27 @@ class _LoginState extends State<Login> {
     FocusScope.of(context).unfocus();
 
     // Đăng nhập
-    User? user =
-        await _authService.signInWithEmailAndPassword(context, email, password);
-    if (user != null) {
-      Navigator.pushReplacementNamed(context, Routes.home);
+    if (!Validator.validateEmail(email)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongEmail,
+      );
+    } else if (!Validator.validatePassword(password)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongPassword,
+      );
+    } else if (email.isEmpty || password.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else {
+      User? user =
+      await _authService.signInWithEmailAndPassword(context, email, password);
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, Routes.home);
+      }
     }
   }
 
@@ -102,17 +120,6 @@ class _LoginState extends State<Login> {
                               BorderSide(color: Colors.black87, width: 2.0),
                         ),
                       ),
-                      onEditingComplete: () =>
-                          _focusNodePassword.requestFocus(),
-                      //Todo: check email
-                      // validator: (String? value) {
-                      //   // if (value == null || value.isEmpty) {
-                      //   //   return "Please enter username.";
-                      //   // } else if (!_boxAccounts.containsKey(value)) {
-                      //   //   return "Username is not registered.";
-                      //   // }
-                      //   return null;
-                      // },
                     ),
                     const SizedBox(height: 5),
                     TextFormField(
@@ -148,17 +155,6 @@ class _LoginState extends State<Login> {
                               BorderSide(color: Colors.black87, width: 2.0),
                         ),
                       ),
-                      //Todo: Check password
-                      // validator: (String? value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return "Please enter password.";
-                      //   }
-                      //   // else if (value != _boxAccounts.get(_controllerUsername.text)) {
-                      //   //   return "Wrong password.";
-                      //   // }
-                      //
-                      //   return null;
-                      // },
                     ),
                     const SizedBox(height: 28),
                     Column(

@@ -29,12 +29,12 @@ class _EditNotiState extends State<AddAccount> {
     String role = '';
     String userID = email.split('@')[0];
 
-    if (email.isNotEmpty && !Validator.validateEmail(email)) {
+    if (!Validator.validateEmail(email)) {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.wrongEmail,
       );
-    } else if (password.isNotEmpty && !Validator.validatePassword(password)) {
+    } else if (!Validator.validatePassword(password)) {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.wrongPassword,
