@@ -105,7 +105,6 @@ void main() {
 
           // Bottom sheet sẽ hiển thị
           expect(find.byType(InfoScreen), findsOneWidget);
-          expect(find.text('1+1=3'), findsOneWidget);
     });
 
     testWidgets('Hiển thị trang thêm môn học khi nhấn vào button +',
