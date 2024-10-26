@@ -8,4 +8,5 @@ class Routes{
   static const String account = '/account';
   static const String classes = '/classes';
   static const String classname = '/classname';
+  static const String webview = '/webview';
 }

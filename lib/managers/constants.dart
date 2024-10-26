@@ -1,5 +1,6 @@
 class FormatDate {
-  static const String dayMonthYear = "dd/MM/yyyy";
+  static const String dateOfBirth = "dd/MM/yyyy";
+  static const String dateOfNotif = "";
 }
 
 class UserRole {

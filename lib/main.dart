@@ -4,10 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:student_management/managers/manager.dart';
-import 'package:student_management/screens/classname.dart';
-import 'package:student_management/screens/account.dart';
-import 'package:student_management/screens/classes.dart';
-import 'package:student_management/screens/notif.dart';
+import 'package:student_management/widgets/widget.dart';
 import 'screens/screen.dart';
 
 final GlobalKey<ScaffoldMessengerState> navigatorKey = GlobalKey<ScaffoldMessengerState>();
@@ -36,8 +33,8 @@ class MyApp extends StatelessWidget {
               Routes.subject: (context) => Subject(),
               Routes.account: (context) => Account(),
               Routes.classes: (context) => Classes(),
-              Routes.classname: (context) => ClassName()
-
+              Routes.classname: (context) => ClassName(),
+              Routes.webview: (context) => WebViewContainer(),
             },
             localizationsDelegates: [
               AppLocalizations.delegate,
