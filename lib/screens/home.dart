@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
@@ -11,6 +12,26 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _authService = AuthService();
+  final AccountService _accountService = AccountService();
+  User? currentUser;
+  Map<String, dynamic>? currentUserData;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+    //Todo: Load thông báo mới nhất
+  }
+
+  Future<void> _loadUserData() async {
+    currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      var userData = await _accountService.loadUserData(context, 'admin', currentUser!.email);
+      setState(() {
+        currentUserData = userData;
+      });
+    }
+  }
 
   Future<void> _signOut() async {
     await _authService.signOut(context);
@@ -53,43 +74,10 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: UserScreen(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
-            onChangePasswordPressed: _onChangePasswordPressed,
-          ),
+          child: UserScreen(userData: currentUserData),
         );
       },
     );
-  }
-
-  void _onChangePasswordPressed() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: ChangePassword(
-            changePassword: _doChangePassword,
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _doChangePassword() async {
-    //
-  }
-
-  Future<void> _onCancelPressed() async {
-    Navigator.pop(context);
-  }
-
-  Future<void> _onOkPressed() async {
-    //
   }
 
   void _onUserPressed() {
@@ -108,7 +96,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _onHomeRefresh() async {
-    //
+    _loadUserData();
+    //Todo: Load thông báo mới nhất
   }
 
   @override
@@ -149,7 +138,7 @@ class _HomeState extends State<Home> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'Nguyễn Hữu Ngọc',
+                              currentUserData?['name'] ?? currentUserData?['email'] ?? 'N/A',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -172,12 +161,13 @@ class _HomeState extends State<Home> {
             RefreshIndicator(
               onRefresh: _onHomeRefresh,
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Column(children: [
                     InfoCard(
                       title:
-                        'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
+                      'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
                       description: 'dd/mm/yyyy',
                       iconData: Icons.notifications_active_outlined,
                       bgColor: Colors.teal,
@@ -185,8 +175,8 @@ class _HomeState extends State<Home> {
                       onPressed: _onNotiPressed,
                     ),
                     InfoCard(
-                      title: 'Tên lớp học',
-                      description: 'Ca 1 101-A2',
+                      title: 'Coming soon',
+                      description: 'Coming soon',
                       iconData: Icons.schedule_outlined,
                       bgColor: Colors.cyan[600],
                       elColor: Colors.white,

@@ -142,7 +142,7 @@ class _AddClasses extends State<AddClasses> {
                   children: [
                     SizedBox(width: 13),
                     Text(
-                      DateFormat(FormatDate.dayMonthYear).format(_selectedDate),
+                      DateFormat(FormatDate.dateOfBirth).format(_selectedDate),
                       style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
                     ),
                     Spacer(),

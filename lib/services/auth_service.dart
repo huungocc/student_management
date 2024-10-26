@@ -46,7 +46,6 @@ class AuthService {
       // Lưu thông tin người dùng vào Firestore với role
       await _firestore.collection(role).doc(email).set({
         'email': email,
-        'default_password': password,
         'role': role,
         'userID': userID
       });

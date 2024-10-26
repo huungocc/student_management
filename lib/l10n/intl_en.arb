@@ -45,5 +45,6 @@
   "wrongEmail": "Invalid email format",
   "wrongPassword": "Password must be at least 6 characters",
   "wrongConfirm": "Confirm password does not match",
-  "emptyInfo": "Please fill all the information"
+  "emptyInfo": "Please fill all the information",
+  "wrongPhone": "Invalid phone format"
 }

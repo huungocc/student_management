@@ -45,5 +45,6 @@
   "wrongEmail": "Sai định dạng Email",
   "wrongPassword": "Mật khẩu có tối thiểu 6 kí tự",
   "wrongConfirm": "Mật khẩu xác nhận không trùng khớp",
-  "emptyInfo": "Vui lòng nhập đầy đủ thông tin"
+  "emptyInfo": "Vui lòng nhập đầy đủ thông tin",
+  "wrongPhone": "Sai định dạng số điện thoại"
 }
