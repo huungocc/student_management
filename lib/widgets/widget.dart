@@ -11,4 +11,6 @@ export 'dialog.dart';
 export 'add_account.dart';
 export 'add_subject.dart';
 export 'function_card.dart';
+export 'web_view_container.dart';
+export 'account_info_screen.dart';
 

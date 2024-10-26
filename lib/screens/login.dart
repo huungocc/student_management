@@ -16,22 +16,28 @@ class Login extends StatefulWidget {
 }
 class _LoginState extends State<Login> {
   final AuthService _authService = AuthService();
-
-  final FocusNode _focusNodePassword = FocusNode();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
   bool _obscurePassword = true;
 
   Future<void> _signIn() async {
-    // Lấy giá trị từ TextEditingController
     String email = _controllerUsername.text.trim();
     String password = _controllerPassword.text;
 
-    FocusScope.of(context).unfocus();
+    FocusScope.of(context).requestFocus(new FocusNode());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerUsername.clear());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _controllerPassword.clear());
 
     // Đăng nhập
-    if (!Validator.validateEmail(email)) {
+    if (email.isEmpty || password.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else if (!Validator.validateEmail(email)) {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.wrongEmail,
@@ -41,16 +47,26 @@ class _LoginState extends State<Login> {
         context,
         content: AppLocalizations.of(context)!.wrongPassword,
       );
-    } else if (email.isEmpty || password.isEmpty) {
-      await CustomDialogUtil.showDialogNotification(
-        context,
-        content: AppLocalizations.of(context)!.emptyInfo,
-      );
     } else {
-      User? user =
-      await _authService.signInWithEmailAndPassword(context, email, password);
-      if (user != null) {
-        Navigator.pushReplacementNamed(context, Routes.home);
+      try {
+        User? user =
+        await _authService.signInWithEmailAndPassword(email, password);
+
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: 'Đăng nhập thành công',
+          onSubmit: () {
+            if (user != null) {
+              Navigator.pushReplacementNamed(context, Routes.home);
+            }
+          }
+        );
+      } catch (e) {
+        print(e);
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: AppLocalizations.of(context)!.signInFailed,
+        );
       }
     }
   }
@@ -124,7 +140,6 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 5),
                     TextFormField(
                       controller: _controllerPassword,
-                      focusNode: _focusNodePassword,
                       obscureText: _obscurePassword,
                       keyboardType: TextInputType.visiblePassword,
                       cursorColor: Colors.black87,
@@ -188,7 +203,6 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
-    _focusNodePassword.dispose();
     _controllerUsername.dispose();
     _controllerPassword.dispose();
     super.dispose();

@@ -57,7 +57,21 @@ class _EditNotiState extends State<AddAccount> {
         context,
         content: 'Tạo tài khoản $_selectedRole\nID: $userID',
         onSubmit: () async {
-          await _authService.signUpWithEmailAndPassword(context, email, password, role, userID);
+          try {
+            await _authService.signUpWithEmailAndPassword(email, password, role, userID);
+
+            await CustomDialogUtil.showDialogNotification(
+              context,
+              content: 'Tạo tài khoản thành công',
+              onSubmit: () => Navigator.pushReplacementNamed(context, Routes.account),
+            );
+          } catch (e) {
+            print(e);
+            await CustomDialogUtil.showDialogNotification(
+              context,
+              content: 'Tạo tài khoản thất bại',
+            );
+          }
         }
       );
     }

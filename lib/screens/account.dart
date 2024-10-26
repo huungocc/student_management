@@ -26,33 +26,50 @@ class _AccountState extends State<Account> {
   }
 
   Future<void> loadAllUserData() async {
-    List<Map<String, dynamic>> loadedAdminData = await _accountService.loadAllUserDataByRole(context, 'admin');
-    List<Map<String, dynamic>> loadedTeacherData = await _accountService.loadAllUserDataByRole(context, 'teacher');
-    List<Map<String, dynamic>> loadedStudentData = await _accountService.loadAllUserDataByRole(context, 'student');
-    setState(() {
-      adminData = loadedAdminData;
-      teacherData = loadedTeacherData;
-      studentData = loadedStudentData;
-    });
+    try {
+      List<Map<String, dynamic>> loadedAdminData = await _accountService.loadAllUserDataByRole(UserRole.admin);
+      List<Map<String, dynamic>> loadedTeacherData = await _accountService.loadAllUserDataByRole(UserRole.teacher);
+      List<Map<String, dynamic>> loadedStudentData = await _accountService.loadAllUserDataByRole(UserRole.student);
+
+      setState(() {
+        adminData = loadedAdminData;
+        teacherData = loadedTeacherData;
+        studentData = loadedStudentData;
+      });
+    }  catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã có lỗi xảy ra'),
+        ),
+      );
+    }
   }
 
-  void _accountPressed() {
+  void _accountPressed(Map<String, dynamic> userData) {
     FocusScope.of(context).requestFocus(new FocusNode());
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+    String info = '''
+      Email: ${userData['email'] ?? 'N/A'}
+      Giới tính: ${userData['gender'] ?? 'N/A'}
+      Ngày sinh: ${userData['dateOfBirth'] ?? 'N/A'}
+      Quê quán: ${userData['country'] ?? 'N/A'}
+      Địa chỉ: ${userData['address'] ?? 'N/A'}
+      Số điện thoại: ${userData['phone'] ?? 'N/A'}
+    ''';
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return InfoScreen(
-          title: 'Ten nguoi dung',
-          description: 'Loai tai khoan',
-          info: 'nguoi giu lang',
+        return AccountInfoScreen(
+          title: userData['name'] ?? 'N/A',
+          description: userData['role'] ?? 'N/A',
+          info: info,
           iconData: Icons.account_circle_outlined,
-          leftButtonTitle: AppLocalizations.of(context)!.delete,
-          rightButtonTitle: AppLocalizations.of(context)!.resetPassword,
-          onLeftPressed: _deleteAccount,
-          onRightPressed: _onResetPassword,
+          buttonTitle: 'Nâng cao',
+          onPressed: () => _openFirebaseUserConsole(),
         );
       },
     );
@@ -77,10 +94,8 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Future<void> _deleteAccount() async {}
-
-  Future<void> _onResetPassword() async {
-    //
+  void _openFirebaseUserConsole() {
+    Navigator.pushNamed(context, Routes.webview);
   }
 
   Future<void> _onAccountRefresh() async {
@@ -147,9 +162,9 @@ class _AccountState extends State<Account> {
                             final admin = adminData[index];
                             return InfoCard(
                               title: admin['name'] ?? admin['email'],
-                              description: admin['role'] ?? 'Unknown Role',
+                              description: admin['role'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
-                              onPressed: () {},
+                              onPressed: () => _accountPressed(admin),
                             );
                           },
                         ),
@@ -169,9 +184,9 @@ class _AccountState extends State<Account> {
                             final teacher = teacherData[index];
                             return InfoCard(
                               title: teacher['name'] ?? teacher['email'],
-                              description: teacher['role'] ?? 'Unknown Role',
+                              description: teacher['role'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
-                              onPressed: () {},
+                              onPressed: () => _accountPressed(teacher),
                             );
                           },
                         ),
@@ -191,9 +206,9 @@ class _AccountState extends State<Account> {
                             final student = studentData[index];
                             return InfoCard(
                               title: student['name'] ?? student['email'],
-                              description: student['role'] ?? 'Unknown Role',
+                              description: student['role'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
-                              onPressed: () {},
+                              onPressed: () => _accountPressed(student),
                             );
                           },
                         ),

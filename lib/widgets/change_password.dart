@@ -1,23 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:student_management/services/account_service.dart';
 import '../managers/manager.dart';
+import 'widget.dart';
 
 class ChangePassword extends StatefulWidget {
-  final VoidCallback changePassword;
+  final Map<String, dynamic>? userData;
 
-  const ChangePassword({super.key, required this.changePassword});
+  const ChangePassword({Key? key, this.userData}) : super(key: key);
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  final _accountService = AccountService();
+
   final TextEditingController _controllerOldPassword = TextEditingController();
   final TextEditingController _controllerNewPassword = TextEditingController();
   final TextEditingController _controllerConfirmPassword = TextEditingController();
   bool _obscureOldPassword = true;
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
+
+  Future<void> changePassword() async {
+    String oldPassword = _controllerOldPassword.text.trim();
+    String newPassword = _controllerNewPassword.text.trim();
+    String confirmPassword = _controllerConfirmPassword.text.trim();
+
+    if (!Validator.validatePassword(oldPassword) || !Validator.validatePassword(newPassword)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongPassword,
+      );
+    } else if (confirmPassword != newPassword) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.wrongConfirm,
+      );
+    } else {
+      if (widget.userData?['email'] != null) {
+        try {
+          await _accountService.changeUserPassword(
+              widget.userData?['email'],
+              oldPassword,
+              confirmPassword
+          );
+
+          await CustomDialogUtil.showDialogNotification(
+            context,
+            content: 'Đổi mật khẩu thành công',
+            onSubmit: () => Navigator.pushReplacementNamed(context, Routes.home),
+          );
+        } catch (e) {
+          print(e);
+          await CustomDialogUtil.showDialogNotification(
+            context,
+            content: 'Đổi mật khẩu thất bại',
+          );
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +178,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onPressed: widget.changePassword,
+            onPressed: changePassword,
             child: Text(
               'Đổi mật khẩu',
               style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)

@@ -7,18 +7,21 @@ class CustomDialogUtil {
   static Future<T?> showDialogNotification<T>(BuildContext context,
       {Function? onSubmit,
         String? title,
-        bool barrierDismissible = true,
+        bool barrierDismissible = false,
         String? image,
         String? content,
         String? titleSubmit}) {
     return showDialog<T>(
       barrierDismissible: barrierDismissible,
       context: context,
-      builder: (BuildContext context) => CustomDialog(
-        title: title,
-        content: content,
-        onSubmit: onSubmit,
-        titleSubmit: titleSubmit ?? AppLocalizations.of(context)!.ok,
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: title,
+          content: content,
+          onSubmit: onSubmit,
+          titleSubmit: titleSubmit ?? AppLocalizations.of(context)!.ok,
+        ),
       ),
     );
   }
@@ -27,7 +30,7 @@ class CustomDialogUtil {
       {Function? onCancel,
         Function? onSubmit,
         String? title,
-        bool barrierDismissible = true,
+        bool barrierDismissible = false,
         bool autoPopWhenPressSubmit = true,
         String? content,
         String? titleCancel,
@@ -36,14 +39,17 @@ class CustomDialogUtil {
     return showDialog<T>(
       barrierDismissible: barrierDismissible,
       context: context,
-      builder: (BuildContext context) => CustomDialog(
-        title: title,
-        content: content,
-        autoPopWhenPressSubmit: autoPopWhenPressSubmit,
-        titleSubmit: titleSubmit ?? AppLocalizations.of(context)!.ok,
-        onSubmit: onSubmit,
-        onCancel: onCancel,
-        titleCancel: hideCancel ? null : (titleCancel ?? AppLocalizations.of(context)!.cancel),
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: title,
+          content: content,
+          autoPopWhenPressSubmit: autoPopWhenPressSubmit,
+          titleSubmit: titleSubmit ?? AppLocalizations.of(context)!.ok,
+          onSubmit: onSubmit,
+          onCancel: onCancel,
+          titleCancel: hideCancel ? null : (titleCancel ?? AppLocalizations.of(context)!.cancel),
+        ),
       ),
     );
   }

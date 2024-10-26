@@ -3,27 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:student_management/services/account_service.dart';
+import 'package:student_management/widgets/widget.dart';
 import '../managers/manager.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import '../managers/constants.dart';
 
 class UserScreen extends StatefulWidget {
-  final VoidCallback onCancelPressed;
-  final VoidCallback onOkPressed;
-  final VoidCallback onChangePasswordPressed;
+  final Map<String, dynamic>? userData;
 
-  const UserScreen({
-    Key? key,
-    required this.onCancelPressed,
-    required this.onOkPressed,
-    required this.onChangePasswordPressed
-  }) : super(key: key);
+  const UserScreen({Key? key, this.userData}) : super(key: key);
 
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
 
 class _UserScreenState extends State<UserScreen> {
+  final _accountService = AccountService();
+
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerCountry = TextEditingController();
   final TextEditingController _controllerAddress = TextEditingController();
@@ -36,6 +32,76 @@ class _UserScreenState extends State<UserScreen> {
   String currentUserSex = 'Nam';
 
   DateTime _selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserData();
+  }
+
+  void _initializeUserData() {
+    if (widget.userData != null) {
+      _controllerName.text = widget.userData?['name'] ?? '';
+      _controllerCountry.text = widget.userData?['country'] ?? '';
+      _controllerAddress.text = widget.userData?['address'] ?? '';
+      _controllerPhone.text = widget.userData?['phone'] ?? '';
+
+      // Cập nhật giới tính
+      if (widget.userData?['gender'] != null) {
+        setState(() {
+          currentUserSex = widget.userData!['gender'];
+        });
+      }
+
+      // Cập nhật ngày sinh
+      if (widget.userData?['dateOfBirth'] != null) {
+        setState(() {
+          _selectedDate =  DateFormat(FormatDate.dateOfBirth).parse(widget.userData!['dateOfBirth']);
+        });
+      }
+    }
+  }
+
+  Future<void> editUserInfo() async {
+    String name = _controllerName.text.trim();
+    String gender = currentUserSex;
+    String dateOfBirth = DateFormat(FormatDate.dateOfBirth).format(_selectedDate);
+    String country = _controllerCountry.text.trim();
+    String address = _controllerAddress.text.trim();
+    String phone = _controllerPhone.text.trim();
+
+    if (name.isEmpty || gender.isEmpty || dateOfBirth.isEmpty || country.isEmpty || address.isEmpty || phone.isEmpty){
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else {
+      try {
+        await _accountService.editUserInfo(
+            'admin',
+            widget.userData!['email'],
+            name,
+            gender,
+            dateOfBirth,
+            country,
+            address,
+            phone
+        );
+
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: 'Sửa thông tin thành công',
+          onSubmit: () => Navigator.pushReplacementNamed(context, Routes.home)
+        );
+      } catch (e) {
+        print(e);
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: 'Sửa thông tin thất bại',
+        );
+      }
+    }
+  }
 
   void _showDatePicker() {
     FocusScope.of(context).requestFocus(FocusNode());
@@ -57,6 +123,30 @@ class _UserScreenState extends State<UserScreen> {
         );
       },
     );
+  }
+
+  void _onChangePasswordPressed() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: ChangePassword(userData: widget.userData),
+        );
+      },
+    );
+  }
+
+  Future<void> _onCancelPressed() async {
+    Navigator.pop(context);
+  }
+
+  Future<void> _onOkPressed() async {
+    editUserInfo();
   }
 
   @override
@@ -111,7 +201,7 @@ class _UserScreenState extends State<UserScreen> {
               ),
             )).toList(),
             onChanged: (value) {
-              //Todo: Đổi giới tính
+              currentUserSex = value!;
             },
             buttonStyleData: ButtonStyleData(padding: EdgeInsets.only(right: 8)),
             iconStyleData: IconStyleData(
@@ -146,7 +236,7 @@ class _UserScreenState extends State<UserScreen> {
                 children: [
                   SizedBox(width: 13),
                   Text(
-                    DateFormat(FormatDate.dayMonthYear).format(_selectedDate),
+                    DateFormat(FormatDate.dateOfBirth).format(_selectedDate),
                     style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
                   ),
                   Spacer(),
@@ -236,7 +326,7 @@ class _UserScreenState extends State<UserScreen> {
                 side: BorderSide(color: Colors.black, width: 1),
               ),
             ),
-            onPressed: widget.onChangePasswordPressed,
+            onPressed: _onChangePasswordPressed,
             child: Text(
                 'Đổi mật khẩu',
                 style: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font, fontSize: 16)
@@ -255,7 +345,7 @@ class _UserScreenState extends State<UserScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                onPressed: widget.onCancelPressed,
+                onPressed: _onCancelPressed,
                 child: Text(
                     AppLocalizations.of(context)!.cancel,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
@@ -271,7 +361,7 @@ class _UserScreenState extends State<UserScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-                onPressed: widget.onOkPressed,
+                onPressed: _onOkPressed,
                 child: Text(
                     AppLocalizations.of(context)!.ok,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
