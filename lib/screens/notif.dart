@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:student_management/services/notif_service.dart';
 import '../managers/manager.dart';
 import '../widgets/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +12,23 @@ class Notif extends StatefulWidget {
 
 class _NotifState extends State<Notif> {
   final TextEditingController _controllerSearch = TextEditingController();
+  final NotifService _notifService = NotifService();
+  List<Map<String,dynamic>> notifData = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadAllNotifData();
+
+  }
+
+  Future<void> loadAllNotifData() async{
+    List<Map<String,dynamic>> loadedNotifData = await _notifService.loadAllNotifData(context);
+    setState(() {
+      notifData = loadedNotifData;
+    });
+  }
 
   void _onNotifPressed() {
     //hủy focus vào textfield
@@ -50,8 +68,6 @@ class _NotifState extends State<Notif> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: EditNoti(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
           ),
         );
       },
@@ -66,16 +82,10 @@ class _NotifState extends State<Notif> {
     _addNotif();
   }
 
-  Future<void> _onCancelPressed() async {
-    Navigator.pop(context);
-  }
-
-  Future<void> _onOkPressed() async {
-    //
-  }
 
   Future<void> _onNotifRefresh() async {
-    //
+    loadAllNotifData();
+
   }
 
   @override
@@ -128,15 +138,24 @@ class _NotifState extends State<Notif> {
                 ),
               ),
               SizedBox(height: 15),
-              RefreshIndicator(
-                onRefresh: _onNotifRefresh,
-                child: SingleChildScrollView(
-                  child: InfoCard(
-                  title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                  description: 'dd/mm/yyyy',
-                  iconData: Icons.notifications_active_outlined,
-                  onPressed: _onNotifPressed,
-                )),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _onNotifRefresh,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemCount: notifData.length,
+                    itemBuilder: (context, index) {
+                      final notif = notifData[index];
+                      return InfoCard(
+                        title: notif['title'] ?? 'Unknown Title',
+                        description: notif['datetime'] ?? 'Unknown Datetime',
+                        iconData: Icons.notifications_active_outlined,
+                        onPressed: () {},
+                      );
+                    },
+                  ),
+                ),
               )
             ],
           ),

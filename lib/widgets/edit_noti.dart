@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:student_management/services/notif_service.dart';
+import 'package:student_management/widgets/dialog.dart';
 import '../managers/manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditNoti extends StatefulWidget {
-  final VoidCallback onCancelPressed;
-  final VoidCallback onOkPressed;
 
-  const EditNoti({
-    Key? key,
-    required this.onCancelPressed,
-    required this.onOkPressed,
-  }) : super(key: key);
 
 
   @override
@@ -20,6 +16,30 @@ class EditNoti extends StatefulWidget {
 class _EditNotiState extends State<EditNoti> {
   final TextEditingController _controllerTitle = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
+
+  final _notifService = NotifService();
+
+  Future<void> _onOkPressed() async {
+    String title = _controllerTitle.text.trim();
+    String content = _controllerDescription.text.trim();
+    String datetime = DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+
+    if(title.isEmpty && content.isEmpty)
+      {
+        await CustomDialogUtil.showDialogNotification(
+          context,
+            content: 'ban can nhap du thong tin'
+        );
+      }
+    else {
+      await _notifService.addNotification(context, title, content, datetime);
+    }
+
+  }
+
+ void _onCancelPressed(){
+    Navigator.pop(context);
+ }
 
 
   @override
@@ -94,7 +114,7 @@ class _EditNotiState extends State<EditNoti> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onCancelPressed,
+                  onPressed: _onCancelPressed,
                   child: Text(
                     AppLocalizations.of(context)!.cancel,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
@@ -110,7 +130,7 @@ class _EditNotiState extends State<EditNoti> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onOkPressed,
+                  onPressed: _onOkPressed,
                   child: Text(
                       AppLocalizations.of(context)!.ok,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
