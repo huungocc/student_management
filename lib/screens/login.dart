@@ -7,9 +7,9 @@ import '../widgets/widget.dart';
 
 
 class Login extends StatefulWidget {
-  const Login({
-    Key? key,
-  }) : super(key: key);
+  final AuthService? authService;
+
+  const Login({Key? key, this.authService}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -52,14 +52,34 @@ class _LoginState extends State<Login> {
         User? user =
         await _authService.signInWithEmailAndPassword(email, password);
 
-        await CustomDialogUtil.showDialogNotification(
-          context,
-          content: 'Đăng nhập thành công',
-          onSubmit: () {
-            if (user != null) {
-              Navigator.pushReplacementNamed(context, Routes.home);
-            }
-          }
+        // await CustomDialogUtil.showDialogNotification(
+        //   context,
+        //   content: 'Đăng nhập thành công',
+        //   onSubmit: () {
+        //     if (user != null) {
+        //       Navigator.pushReplacementNamed(context, Routes.home);
+        //     }
+        //   }
+        // );
+        await showDialog(
+          context: context,
+          barrierDismissible: false, // Ngăn người dùng đóng dialog bằng cách nhấn bên ngoài
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Thông báo'),
+              content: Text('Đăng nhập thành công'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    if (user != null) {
+                      Navigator.pushReplacementNamed(context, Routes.home);
+                    }
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
         );
       } catch (e) {
         print(e);
@@ -67,6 +87,25 @@ class _LoginState extends State<Login> {
           context,
           content: AppLocalizations.of(context)!.signInFailed,
         );
+        await showDialog(
+          context: context,
+          barrierDismissible: false, // Ngăn đóng dialog khi nhấn ra ngoài
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.signInFailed), // Hiển thị thông báo thất bại
+              content: Text(AppLocalizations.of(context)!.signInFailed),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Đóng dialog
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+
       }
     }
   }

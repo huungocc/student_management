@@ -3,9 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
+  final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String ROLE_KEY = 'user_role';
+
+  AuthService({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+  }) : this.auth = auth ?? FirebaseAuth.instance,
+        this.firestore = firestore ?? FirebaseFirestore.instance;
 
   // Đăng nhập với email và mật khẩu
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
