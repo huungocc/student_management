@@ -15,12 +15,19 @@ class _HomeState extends State<Home> {
   final AccountService _accountService = AccountService();
   User? currentUser;
   Map<String, dynamic>? currentUserData;
+  bool isAdmin = false;
 
   @override
   void initState() {
     super.initState();
+    _checkPermission();
     _loadUserData();
     //Todo: Load thông báo mới nhất
+  }
+
+  Future<void> _checkPermission() async {
+    isAdmin = await _authService.hasPermission(['admin']);
+    setState(() {});
   }
 
   Future<void> _loadUserData() async {
@@ -227,12 +234,15 @@ class _HomeState extends State<Home> {
                             elColor: Colors.white,
                             onPressed: _onClassPressed,
                           ),
-                          FunctionCard(
-                            title: AppLocalizations.of(context)!.account,
-                            iconData: Icons.people_alt_outlined,
-                            bgColor: Colors.indigo,
-                            elColor: Colors.white,
-                            onPressed: _onUserPressed,
+                          Visibility(
+                            visible: isAdmin,
+                            child: FunctionCard(
+                              title: AppLocalizations.of(context)!.account,
+                              iconData: Icons.people_alt_outlined,
+                              bgColor: Colors.indigo,
+                              elColor: Colors.white,
+                              onPressed: _onUserPressed,
+                            ),
                           ),
                         ],
                       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
+import '../services/service.dart';
 import '../widgets/widget.dart';
 
 class ClassName extends StatefulWidget {
@@ -12,7 +13,20 @@ class ClassName extends StatefulWidget {
 }
 
 class _ClassNameState extends State<ClassName> {
+  final AuthService _authService = AuthService();
+  bool isAdmin = false;
   final TextEditingController _controllerContentClass = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    isAdmin = await _authService.hasPermission(['admin']);
+    setState(() {});
+  }
 
   void _onEditClassPressed() {
     showModalBottomSheet(
@@ -83,42 +97,53 @@ class _ClassNameState extends State<ClassName> {
         height: 60,
         color: Colors.white70,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(130, 30),
-                backgroundColor: Colors.black87,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(130, 30),
+                  backgroundColor: Colors.black87,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
+                onPressed: () {},
+                child: Text(
+                  "Điểm",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: Fonts.display_font,
+                      fontSize: 16),
+                )
               ),
-              onPressed: () {},
-              child: Text(
-                "Điểm",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: Fonts.display_font,
-                    fontSize: 16),
-              )),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(130, 30),
-                backgroundColor: Colors.orange,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+            ),
+            Visibility(
+              visible: isAdmin,
+              child: SizedBox(width: 10)
+            ),
+            Visibility(
+              visible: isAdmin,
+              child: Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(130, 30),
+                    backgroundColor: Colors.orange,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  onPressed: _onEditClassPressed,
+                  child: Text(
+                    AppLocalizations.of(context)!.edit,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: Fonts.display_font,
+                        fontSize: 16),
+                  )),
               ),
-              onPressed: _onEditClassPressed,
-              child: Text(
-                AppLocalizations.of(context)!.edit,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: Fonts.display_font,
-                    fontSize: 16),
-              )),
+            ),
           ],
         )),
     );

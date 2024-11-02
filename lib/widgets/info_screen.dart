@@ -13,6 +13,7 @@ class InfoScreen extends StatefulWidget {
   final String rightButtonTitle;
   final VoidCallback onLeftPressed;
   final VoidCallback onRightPressed;
+  final bool isAdmin;
 
   const InfoScreen({
     Key? key,
@@ -26,6 +27,7 @@ class InfoScreen extends StatefulWidget {
     required this.rightButtonTitle,
     required this.onLeftPressed,
     required this.onRightPressed,
+    required this.isAdmin
   }) : super(key: key);
 
   @override
@@ -93,52 +95,55 @@ class _InfoScreenState extends State<InfoScreen> {
             ),
           ),
           SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red[600],
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+          Visibility(
+            visible: widget.isAdmin,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[600],
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  onPressed: widget.onLeftPressed,
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete_outline_outlined, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                          widget.leftButtonTitle,
+                          style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
+                      ),
+                      SizedBox(width: 7),
+                    ],
                   ),
                 ),
-                onPressed: widget.onLeftPressed,
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_outline_outlined, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text(
-                        widget.leftButtonTitle,
-                        style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black87,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    SizedBox(width: 7),
-                  ],
-                ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black87,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  onPressed: widget.onRightPressed,
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit_outlined, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                          widget.rightButtonTitle,
+                          style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
+                      ),
+                      SizedBox(width: 7),
+                    ],
                   ),
                 ),
-                onPressed: widget.onRightPressed,
-                child: Row(
-                  children: [
-                    Icon(Icons.edit_outlined, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text(
-                        widget.rightButtonTitle,
-                        style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
-                    ),
-                    SizedBox(width: 7),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(height: 15),
         ],
