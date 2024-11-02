@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../managers/manager.dart';
+import '../services/service.dart';
 import '../widgets/widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,7 +11,20 @@ class Notif extends StatefulWidget {
 }
 
 class _NotifState extends State<Notif> {
+  final AuthService _authService = AuthService();
   final TextEditingController _controllerSearch = TextEditingController();
+  bool isAdmin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    isAdmin = await _authService.hasPermission(['admin']);
+    setState(() {});
+  }
 
   void _onNotifPressed() {
     //hủy focus vào textfield
@@ -21,6 +35,7 @@ class _NotifState extends State<Notif> {
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
+          isAdmin: isAdmin,
           title:
               'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
           description: 'dd/mm/yyyy',
@@ -142,12 +157,15 @@ class _NotifState extends State<Notif> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal,
-        elevation: 0,
-        shape: CircleBorder(),
-        child: Icon(Icons.add_rounded, color: Colors.white),
-        onPressed: _addNotif,
+      floatingActionButton: Visibility(
+        visible: isAdmin,
+        child: FloatingActionButton(
+          backgroundColor: Colors.teal,
+          elevation: 0,
+          shape: CircleBorder(),
+          child: Icon(Icons.add_rounded, color: Colors.white),
+          onPressed: _addNotif,
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
+import '../services/service.dart';
 import '../widgets/widget.dart';
 
 class Classes extends StatefulWidget {
@@ -13,11 +14,23 @@ class Classes extends StatefulWidget {
 }
 
 class _ClassesState extends State<Classes> {
-
+  final AuthService _authService = AuthService();
+  bool isAdmin = false;
 
   final TextEditingController _controllerSearch = TextEditingController();
 
   final List<String> _monhoc = ['mon 1', 'mon 2', 'mon 3'];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    isAdmin = await _authService.hasPermission(['admin']);
+    setState(() {});
+  }
 
   void _onClassesPressed(){
     Navigator.pushNamed(context, Routes.classname);
@@ -145,12 +158,15 @@ class _ClassesState extends State<Classes> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        elevation: 0,
-        shape: CircleBorder(),
-        child: Icon(Icons.add_rounded, color: Colors.white),
-        onPressed: _addClass,
+      floatingActionButton: Visibility(
+        visible: isAdmin,
+        child: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          elevation: 0,
+          shape: CircleBorder(),
+          child: Icon(Icons.add_rounded, color: Colors.white),
+          onPressed: _addClass,
+        ),
       ),
     );
   }

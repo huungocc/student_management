@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
+import '../services/service.dart';
 import '../widgets/widget.dart';
 
 class Subject extends StatefulWidget {
@@ -12,7 +13,21 @@ class Subject extends StatefulWidget {
 }
 
 class _SubjectState extends State<Subject> {
+  final AuthService _authService = AuthService();
+  bool isAdmin = false;
+
   final TextEditingController _controllerSearch = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermission();
+  }
+
+  Future<void> _checkPermission() async {
+    isAdmin = await _authService.hasPermission(['admin']);
+    setState(() {});
+  }
 
   //-------su kien--------------
   void _onSubjectPressed() {
@@ -24,6 +39,7 @@ class _SubjectState extends State<Subject> {
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
+          isAdmin: isAdmin,
           title: 'Toan',
           description: 'Dai cuong',
           info: '1+1=3',
@@ -138,12 +154,15 @@ class _SubjectState extends State<Subject> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        elevation: 0,
-        shape: CircleBorder(),
-        child: Icon(Icons.add_rounded, color: Colors.white),
-        onPressed: _addSubject,
+      floatingActionButton: Visibility(
+        visible: isAdmin,
+        child: FloatingActionButton(
+          backgroundColor: Colors.red,
+          elevation: 0,
+          shape: CircleBorder(),
+          child: Icon(Icons.add_rounded, color: Colors.white),
+          onPressed: _addSubject,
+        ),
       ),
     );
   }
