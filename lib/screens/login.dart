@@ -22,14 +22,10 @@ class _LoginState extends State<Login> {
   bool _obscurePassword = true;
 
   Future<void> _signIn() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     String email = _controllerUsername.text.trim();
     String password = _controllerPassword.text;
-
-    FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerUsername.clear());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerPassword.clear());
 
     // Đăng nhập
     if (email.isEmpty || password.isEmpty) {

@@ -10,8 +10,9 @@ import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class UserScreen extends StatefulWidget {
   final Map<String, dynamic>? userData;
+  final String userRole;
 
-  const UserScreen({Key? key, this.userData}) : super(key: key);
+  const UserScreen({Key? key, this.userData, required this.userRole}) : super(key: key);
 
   @override
   State<UserScreen> createState() => _UserScreenState();
@@ -63,6 +64,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> editUserInfo() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+
     String name = _controllerName.text.trim();
     String gender = currentUserSex;
     String dateOfBirth = DateFormat(FormatDate.dateOfBirth).format(_selectedDate);
@@ -78,7 +81,7 @@ class _UserScreenState extends State<UserScreen> {
     } else {
       try {
         await _accountService.editUserInfo(
-            'admin',
+            widget.userRole,
             widget.userData!['email'],
             name,
             gender,
@@ -105,7 +108,6 @@ class _UserScreenState extends State<UserScreen> {
 
   void _showDatePicker() {
     FocusScope.of(context).requestFocus(FocusNode());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

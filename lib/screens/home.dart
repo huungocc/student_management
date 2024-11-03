@@ -15,29 +15,38 @@ class _HomeState extends State<Home> {
   final AccountService _accountService = AccountService();
   User? currentUser;
   Map<String, dynamic>? currentUserData;
+
   bool isAdmin = false;
+  String userRole = '';
 
   @override
   void initState() {
     super.initState();
-    _checkPermission();
-    _loadUserData();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _checkPermission();
+    await _getUserRole();
+    await _loadUserData();
     //Todo: Load thông báo mới nhất
+    setState(() {});
   }
 
   Future<void> _checkPermission() async {
-    isAdmin = await _authService.hasPermission(['admin']);
-    setState(() {});
+    isAdmin = await _authService.hasPermission([UserRole.admin]);
+  }
+
+  Future<void> _getUserRole() async {
+    userRole = await AuthService.getStringRole();
   }
 
   Future<void> _loadUserData() async {
     currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
+    if (currentUser != null && userRole.isNotEmpty) {
       try {
-        var userData = await _accountService.loadUserData('admin', currentUser!.email);
-        setState(() {
-          currentUserData = userData;
-        });
+        var userData = await _accountService.loadUserData(userRole, currentUser!.email);
+        currentUserData = userData;
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -108,7 +117,7 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: UserScreen(userData: currentUserData),
+          child: UserScreen(userData: currentUserData, userRole: userRole),
         );
       },
     );

@@ -25,16 +25,13 @@ class _SubjectState extends State<Subject> {
   }
 
   Future<void> _checkPermission() async {
-    isAdmin = await _authService.hasPermission(['admin']);
+    isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
   }
 
   //-------su kien--------------
   void _onSubjectPressed() {
-    //hủy focus vào textfield
-    FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerSearch.clear());
+    FocusScope.of(context).requestFocus(FocusNode());
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -55,8 +52,6 @@ class _SubjectState extends State<Subject> {
 
   void _addSubject() {
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerSearch.clear());
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,

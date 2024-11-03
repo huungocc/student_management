@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../managers/manager.dart';
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -22,9 +24,34 @@ class AuthService {
     return userCredential.user;
   }
 
+  // Đăng ký tài khoản với email, mật khẩu và role
+  Future<User?> signUpWithEmailAndPassword(String email, String password, String role, String userID) async {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Lưu thông tin người dùng vào Firestore với role
+      await _firestore.collection(role).doc(email).set({
+        'email': email,
+        'role': role,
+        'userID': userID
+      });
+      return userCredential.user;
+  }
+
+  // Đăng xuất
+  Future<void> signOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(ROLE_KEY);
+    await _auth.signOut();
+  }
+
+  //----------PHÂN QUYỀN----------//
+
+  //Lấy role của người dùng
   Future<String?> getUserRole(String email) async {
     try {
-      List<String> collections = ['admin', 'teacher', 'student'];
+      List<String> collections = [UserRole.admin, UserRole.teacher, UserRole.student];
 
       for (String collection in collections) {
         DocumentSnapshot doc = await _firestore.collection(collection).doc(email).get();
@@ -52,26 +79,10 @@ class AuthService {
     return prefs.getString(ROLE_KEY);
   }
 
-  // Đăng ký tài khoản với email, mật khẩu và role
-  Future<User?> signUpWithEmailAndPassword(String email, String password, String role, String userID) async {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // Lưu thông tin người dùng vào Firestore với role
-      await _firestore.collection(role).doc(email).set({
-        'email': email,
-        'role': role,
-        'userID': userID
-      });
-      return userCredential.user;
-  }
-
-  // Đăng xuất
-  Future<void> signOut() async {
+  // Lấy role từ SharedPreferences (dạng String)
+  static Future<String> getStringRole() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(ROLE_KEY);
-    await _auth.signOut();
+    return prefs.getString(ROLE_KEY) ?? '';
   }
 
   // Kiểm tra quyền truy cập

@@ -23,6 +23,8 @@ class _EditNotiState extends State<AddAccount> {
   String _selectedRole = '';
 
   Future<void> _signup() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     String email = _controllerEmail.text.trim();
     String password = _controllerPassword.text.trim();
     String confirm = _controllerPassword.text.trim();

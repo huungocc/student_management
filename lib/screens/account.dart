@@ -46,10 +46,7 @@ class _AccountState extends State<Account> {
   }
 
   void _accountPressed(Map<String, dynamic> userData) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerSearch.clear());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusScope.of(context).requestFocus(FocusNode());
 
     String info = '''
       Email: ${userData['email'] ?? 'N/A'}
