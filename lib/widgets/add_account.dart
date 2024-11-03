@@ -27,7 +27,7 @@ class _EditNotiState extends State<AddAccount> {
 
     String email = _controllerEmail.text.trim();
     String password = _controllerPassword.text.trim();
-    String confirm = _controllerPassword.text.trim();
+    String confirm = _controllerConfirmPassword.text.trim();
     String role = '';
     String userID = email.split('@')[0];
 
@@ -65,7 +65,7 @@ class _EditNotiState extends State<AddAccount> {
             await CustomDialogUtil.showDialogNotification(
               context,
               content: 'Tạo tài khoản thành công',
-              onSubmit: () => Navigator.pushReplacementNamed(context, Routes.account),
+              onSubmit: () => Navigator.pop(context)
             );
           } catch (e) {
             print(e);

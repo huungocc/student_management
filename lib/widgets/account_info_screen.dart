@@ -71,6 +71,7 @@ class _InfoScreenState extends State<AccountInfoScreen> {
                     ),
                     Text(
                       widget.description,
+                      textAlign: TextAlign.left,
                       style: TextStyle(fontFamily: Fonts.display_font, fontSize: 13, color: widget.elColor ?? Colors.black87),
                     ),
                   ],
