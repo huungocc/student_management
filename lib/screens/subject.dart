@@ -16,12 +16,16 @@ class _SubjectState extends State<Subject> {
   final AuthService _authService = AuthService();
   bool isAdmin = false;
 
+  final SubjectService _subjectService = SubjectService();
+  List<Map<String, dynamic>> subjectData = [];
+
   final TextEditingController _controllerSearch = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _checkPermission();
+    loadAllSubjectData();
   }
 
   Future<void> _checkPermission() async {
@@ -29,22 +33,44 @@ class _SubjectState extends State<Subject> {
     setState(() {});
   }
 
-  //-------su kien--------------
-  void _onSubjectPressed() {
+  Future<void> loadAllSubjectData() async {
+    try {
+      List<Map<String, dynamic>> loadedSubjectData = await _subjectService.loadAllSubjectData();
+
+      setState(() {
+        subjectData = loadedSubjectData;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã có lỗi xảy ra'),
+        ),
+      );
+    }
+  }
+
+  void _onSubjectPressed(Map<String, dynamic> subjectData) {
     FocusScope.of(context).requestFocus(FocusNode());
+
+    String info = '''
+      Số tín chỉ: ${subjectData['credit'] ?? 'N/A'}
+      Mô tả: ${subjectData['description'] ?? 'N/A'}
+      Tổng số buổi: ${subjectData['totalDays'] ?? 'N/A'}
+    ''';
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
-          isAdmin: isAdmin,
-          title: 'Toan',
-          description: 'Dai cuong',
-          info: '1+1=3',
+          title: subjectData['title'] ?? 'N/A',
+          description: subjectData['category'] ?? 'N/A',
+          info: info,
           iconData: Icons.school_outlined,
-          onLeftPressed: _deleteSubject,
-          onRightPressed: _addSubject,
           leftButtonTitle: AppLocalizations.of(context)!.delete,
           rightButtonTitle: AppLocalizations.of(context)!.edit,
+          onLeftPressed: () => _deleteSubject(subjectData['title']),
+          onRightPressed: () => _editSubject(subjectData),
+          isAdmin: isAdmin,
         );
       },
     );
@@ -52,7 +78,6 @@ class _SubjectState extends State<Subject> {
 
   void _addSubject() {
     FocusScope.of(context).requestFocus(FocusNode());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -61,25 +86,62 @@ class _SubjectState extends State<Subject> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: AddSubject(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
-          ),
+          child: AddSubject(isAddSubject: true),
         );
       },
+    ).then((_) {
+      _onSubjectRefresh();
+    });
+  }
+
+  Future<void> _deleteSubject(String title) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    await CustomDialogUtil.showDialogConfirm(
+      context,
+      content: 'Xóa môn học $title',
+      onSubmit: () async {
+        try {
+          await _subjectService.deleteSubject(title);
+
+          await CustomDialogUtil.showDialogNotification(
+            context,
+            content: 'Xóa môn học thành công',
+            onSubmit: () {
+              Navigator.pop(context);
+              loadAllSubjectData();
+            }
+          );
+        } catch (e) {
+          print(e);
+          await CustomDialogUtil.showDialogNotification(
+            context,
+            content: 'Xóa môn học thất bại',
+          );
+        }
+      }
     );
   }
 
-  void _onCancelPressed() {
-    Navigator.pop(context);
+  void _editSubject(Map<String, dynamic> subjectData) {
+    FocusScope.of(context).requestFocus(FocusNode());
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: AddSubject(isAddSubject: false, subjectData: subjectData),
+        );
+      },
+    ).then((_) {
+      _onSubjectRefresh();
+    });
   }
 
-  Future<void> _onOkPressed() async {}
-
-  Future<void> _deleteSubject() async {}
-
   Future<void> _onSubjectRefresh() async {
-    //
+    loadAllSubjectData();
   }
 
   @override
@@ -132,18 +194,24 @@ class _SubjectState extends State<Subject> {
                 ),
               ),
               SizedBox(height: 15),
-              RefreshIndicator(
-                onRefresh: _onSubjectRefresh,
-                child: Scrollbar(
-                    thumbVisibility: true,
-                    radius: Radius.circular(8),
-                    child: SingleChildScrollView(
-                        child: InfoCard(
-                      title: 'Toan',
-                      description: 'Dai Cuong',
-                      iconData: Icons.school_outlined,
-                      onPressed: _onSubjectPressed,
-                    ))),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _onSubjectRefresh,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemCount: subjectData.length,
+                    itemBuilder: (context, index) {
+                      final subject = subjectData[index];
+                      return InfoCard(
+                        title: subject['title'] ?? 'Unknown Subject',
+                        description: subject['category'] ?? 'Unknown Category',
+                        iconData: Icons.school_outlined,
+                        onPressed: () => _onSubjectPressed(subject),
+                      );
+                    },
+                  ),
+                ),
               )
             ],
           ),

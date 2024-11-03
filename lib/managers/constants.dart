@@ -8,3 +8,8 @@ class UserRole {
   static const String teacher = "teacher";
   static const String student = "student";
 }
+
+class SubjectType {
+  static const String general = "general";
+  static const String major = "major";
+}

@@ -52,7 +52,11 @@ class _ChangePasswordState extends State<ChangePassword> {
           await CustomDialogUtil.showDialogNotification(
             context,
             content: 'Đổi mật khẩu thành công',
-            onSubmit: () => Navigator.pushReplacementNamed(context, Routes.home),
+            onSubmit: () => Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.home,
+                  (Route<dynamic> route) => false,
+            )
           );
         } catch (e) {
           print(e);

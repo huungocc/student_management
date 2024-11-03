@@ -65,7 +65,7 @@ class _EditNotiState extends State<AddAccount> {
             await CustomDialogUtil.showDialogNotification(
               context,
               content: 'Tạo tài khoản thành công',
-              onSubmit: () => Navigator.pushReplacementNamed(context, Routes.account),
+              onSubmit: () => Navigator.pop(context)
             );
           } catch (e) {
             print(e);

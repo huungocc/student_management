@@ -1,32 +1,163 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:student_management/widgets/widget.dart';
 import '../managers/manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../services/service.dart';
+
 class AddSubject extends StatefulWidget {
-  final VoidCallback onCancelPressed;
-  final VoidCallback onOkPressed;
+  final bool isAddSubject;
+  final Map<String, dynamic>? subjectData;
 
-  const AddSubject({
-    Key? key,
-    required this.onCancelPressed,
-    required this.onOkPressed,
-  }) : super(key: key);
-
+  const AddSubject({super.key, required this.isAddSubject, this.subjectData});
 
   @override
   State<AddSubject> createState() => _AddSubject();
 }
 
 class _AddSubject extends State<AddSubject> {
+  final _subjectService = SubjectService();
+
   final TextEditingController _controllerSubjectName = TextEditingController();
-  final TextEditingController _controllerContent = TextEditingController();
-  final TextEditingController _controllerNumberOfDays = TextEditingController();
+  final TextEditingController _controllerDescription = TextEditingController();
+  final TextEditingController _controllerTotalDays = TextEditingController();
+
+  String _currentCategory = 'Đại cương';
+  String _currentCredit = '1';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserData();
+  }
+
+  void _initializeUserData() {
+    if (widget.subjectData != null) {
+      _controllerSubjectName.text = widget.subjectData?['title'] ?? '';
+      _controllerDescription.text = widget.subjectData?['description'] ?? '';
+      _controllerTotalDays.text = widget.subjectData?['totalDays'] ?? '';
+
+      // Cập nhật loại môn
+      if (widget.subjectData?['category'] != null) {
+        setState(() {
+          if (widget.subjectData!['category'] == SubjectType.general) _currentCategory = 'Đại cương';
+          if (widget.subjectData!['category'] == SubjectType.major) _currentCategory = 'Chuyên ngành';
+        });
+      }
+
+      // Cập nhật số tín chỉ
+      if (widget.subjectData?['credit'] != null) {
+        setState(() {
+          _currentCredit = widget.subjectData!['credit'];
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _tinchi = ['1', '2', '3'];
-    final List<String> _loaimon = ['Đại cương', 'Chuyên ngành'];
+    final List<String> listCredit = ['1', '2', '3'];
+    final List<String> listCategory = ['Đại cương', 'Chuyên ngành'];
+
+    Future<void> addSubject() async {
+      FocusScope.of(context).requestFocus(FocusNode());
+
+      String name = _controllerSubjectName.text.trim();
+      String description = _controllerDescription.text.trim();
+      String totalDays = _controllerTotalDays.text.trim();
+      String credit = _currentCredit;
+      String category = _currentCategory;
+
+      if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: AppLocalizations.of(context)!.emptyInfo,
+        );
+      } else {
+        if (category == 'Đại cương') category = SubjectType.general;
+        if (category == 'Chuyên ngành') category = SubjectType.major;
+
+        await CustomDialogUtil.showDialogConfirm(
+          context,
+          content: 'Tạo môn học $name',
+          onSubmit: () async {
+            try {
+              await _subjectService.addSubject(
+                name,
+                category,
+                credit,
+                description,
+                totalDays
+              );
+
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Tạo môn học thành công',
+                onSubmit: () => Navigator.pop(context)
+              );
+            } catch (e) {
+              print(e);
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Tạo môn học thất bại',
+              );
+            }
+          }
+        );
+      }
+    }
+
+    Future<void> editSubject() async {
+      FocusScope.of(context).requestFocus(FocusNode());
+
+      String name = _controllerSubjectName.text.trim();
+      String description = _controllerDescription.text.trim();
+      String totalDays = _controllerTotalDays.text.trim();
+      String credit = '';
+      String category = '';
+
+      if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
+        await CustomDialogUtil.showDialogNotification(
+          context,
+          content: AppLocalizations.of(context)!.emptyInfo,
+        );
+      } else {
+        if (category == 'Đại cương') category = SubjectType.general;
+        if (category == 'Chuyên ngành') category = SubjectType.major;
+
+        await CustomDialogUtil.showDialogConfirm(
+          context,
+          content: 'Sửa môn học $name',
+          onSubmit: () async {
+            try {
+              await _subjectService.addSubject(
+                  name,
+                  category,
+                  credit,
+                  description,
+                  totalDays
+              );
+
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Sửa môn học thành công',
+              );
+            } catch (e) {
+              print(e);
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Sửa môn học thất bại',
+              );
+            }
+          }
+        );
+      }
+    }
+
+    void onCancelPressed() {
+      Navigator.pop(context);
+    }
 
     return SingleChildScrollView(
       child: Container(
@@ -35,6 +166,7 @@ class _AddSubject extends State<AddSubject> {
           children: [
             TextField(
               controller: _controllerSubjectName,
+              enabled: widget.isAddSubject,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.text,
               style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
@@ -69,7 +201,8 @@ class _AddSubject extends State<AddSubject> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              items: _loaimon.map((item) => DropdownMenuItem<String>(
+              value: _currentCategory,
+              items: listCategory.map((item) => DropdownMenuItem<String>(
                 value: item,
                 child: Text(
                   item,
@@ -77,7 +210,7 @@ class _AddSubject extends State<AddSubject> {
                 ),
               )).toList(),
               onChanged: (value) {
-                //
+                _currentCategory = value!;
               },
               buttonStyleData: ButtonStyleData(padding: EdgeInsets.only(right: 8)),
               iconStyleData: IconStyleData(
@@ -112,7 +245,8 @@ class _AddSubject extends State<AddSubject> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              items: _tinchi.map((item) => DropdownMenuItem<String>(
+              value: _currentCredit,
+              items: listCredit.map((item) => DropdownMenuItem<String>(
                 value: item,
                 child: Text(
                   item,
@@ -120,7 +254,7 @@ class _AddSubject extends State<AddSubject> {
                 ),
               )).toList(),
               onChanged: (value) {
-                //
+                _currentCredit = value!;
               },
               buttonStyleData: ButtonStyleData(
                 padding: EdgeInsets.only(right: 8),
@@ -144,7 +278,7 @@ class _AddSubject extends State<AddSubject> {
             SizedBox(height: 15),
             Container(
               child: TextField(
-                controller: _controllerContent,
+                controller: _controllerDescription,
                 cursorColor: Colors.black87,
                 keyboardType: TextInputType.text,
                 minLines: 3,
@@ -170,7 +304,7 @@ class _AddSubject extends State<AddSubject> {
             ),
             SizedBox(height: 15),
             TextField(
-              controller: _controllerNumberOfDays,
+              controller: _controllerTotalDays,
               cursorColor: Colors.black87,
               keyboardType: TextInputType.number,
               style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
@@ -193,7 +327,6 @@ class _AddSubject extends State<AddSubject> {
             ),
             SizedBox(height: 15),
             Row(
-
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -204,7 +337,7 @@ class _AddSubject extends State<AddSubject> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onCancelPressed,
+                  onPressed: onCancelPressed,
                   child: Text(
                       AppLocalizations.of(context)!.cancel,
                       style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
@@ -220,7 +353,7 @@ class _AddSubject extends State<AddSubject> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onOkPressed,
+                  onPressed: widget.isAddSubject ? addSubject : editSubject,
                   child: Text(
                       AppLocalizations.of(context)!.ok,
                       style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)

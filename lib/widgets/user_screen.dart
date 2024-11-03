@@ -94,7 +94,11 @@ class _UserScreenState extends State<UserScreen> {
         await CustomDialogUtil.showDialogNotification(
           context,
           content: 'Sửa thông tin thành công',
-          onSubmit: () => Navigator.pushReplacementNamed(context, Routes.home)
+          onSubmit: () => Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.home,
+                (Route<dynamic> route) => false,
+          )
         );
       } catch (e) {
         print(e);

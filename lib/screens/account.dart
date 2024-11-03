@@ -76,7 +76,6 @@ class _AccountState extends State<Account> {
     FocusScope.of(context).requestFocus(FocusNode());
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _controllerSearch.clear());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -88,7 +87,9 @@ class _AccountState extends State<Account> {
           child: AddAccount(),
         );
       },
-    );
+    ).then((_) {
+      _onAccountRefresh();
+    });
   }
 
   void _openFirebaseUserConsole() {
