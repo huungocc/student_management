@@ -22,7 +22,7 @@ class _NotifState extends State<Notif> {
   }
 
   Future<void> _checkPermission() async {
-    isAdmin = await _authService.hasPermission(['admin']);
+    isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
   }
 

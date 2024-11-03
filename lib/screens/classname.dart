@@ -24,7 +24,7 @@ class _ClassNameState extends State<ClassName> {
   }
 
   Future<void> _checkPermission() async {
-    isAdmin = await _authService.hasPermission(['admin']);
+    isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
   }
 

@@ -24,6 +24,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool _obscureConfirmPassword = true;
 
   Future<void> changePassword() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     String oldPassword = _controllerOldPassword.text.trim();
     String newPassword = _controllerNewPassword.text.trim();
     String confirmPassword = _controllerConfirmPassword.text.trim();
