@@ -13,4 +13,6 @@ export 'add_subject.dart';
 export 'function_card.dart';
 export 'web_view_container.dart';
 export 'account_info_screen.dart';
+export 'add_member.dart';
+export 'score_screen.dart';
 

@@ -8,7 +8,11 @@ class InfoCard extends StatefulWidget {
   final IconData iconData;
   final Color? bgColor;
   final Color? elColor;
-  final Function onPressed;
+  final Function? onPressed;
+  final Function? onLongPressed;
+  final bool hasCheckBox;
+  final ValueChanged<bool?>? onChecked;
+  final bool isChecked;
 
   const InfoCard({
     Key? key,
@@ -17,7 +21,11 @@ class InfoCard extends StatefulWidget {
     required this.iconData,
     this.bgColor,
     this.elColor,
-    required this.onPressed,
+    this.onPressed,
+    this.onLongPressed,
+    this.hasCheckBox = false,
+    this.onChecked,
+    this.isChecked = false,
   }) : super(key: key);
 
   @override
@@ -28,7 +36,8 @@ class _InfoCardState extends State<InfoCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => widget.onPressed(),
+      onTap: widget.onPressed != null ? () => widget.onPressed!() : null,
+      onLongPress: widget.onLongPressed != null ? () => widget.onLongPressed!() : null,
       child: Container(
         width: double.infinity,
         height: 90,
@@ -45,6 +54,14 @@ class _InfoCardState extends State<InfoCard> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Visibility(
+                  visible: widget.hasCheckBox,
+                  child: Checkbox(
+                    activeColor: Colors.black87,
+                    value: widget.isChecked,
+                    onChanged: widget.onChecked,
+                  ),
+                ),
                 Icon(widget.iconData, size: 30, color: widget.elColor ?? Colors.black87),
                 SizedBox(width: 16),
                 Expanded(

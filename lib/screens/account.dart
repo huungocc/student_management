@@ -49,6 +49,7 @@ class _AccountState extends State<Account> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     String info = '''
+      ID: ${userData['userID'] ?? 'N/A'}
       Email: ${userData['email'] ?? 'N/A'}
       Giới tính: ${userData['gender'] ?? 'N/A'}
       Ngày sinh: ${userData['dateOfBirth'] ?? 'N/A'}
@@ -67,6 +68,7 @@ class _AccountState extends State<Account> {
           iconData: Icons.account_circle_outlined,
           buttonTitle: 'Nâng cao',
           onPressed: () => _openFirebaseUserConsole(),
+          isAdmin: true,
         );
       },
     );
@@ -160,7 +162,7 @@ class _AccountState extends State<Account> {
                             final admin = adminData[index];
                             return InfoCard(
                               title: admin['name'] ?? admin['email'],
-                              description: admin['role'] ?? 'N/A',
+                              description: admin['userID'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
                               onPressed: () => _accountPressed(admin),
                             );
@@ -182,7 +184,7 @@ class _AccountState extends State<Account> {
                             final teacher = teacherData[index];
                             return InfoCard(
                               title: teacher['name'] ?? teacher['email'],
-                              description: teacher['role'] ?? 'N/A',
+                              description: teacher['userID'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
                               onPressed: () => _accountPressed(teacher),
                             );
@@ -204,7 +206,7 @@ class _AccountState extends State<Account> {
                             final student = studentData[index];
                             return InfoCard(
                               title: student['name'] ?? student['email'],
-                              description: student['role'] ?? 'N/A',
+                              description: student['userID'] ?? 'N/A',
                               iconData: Icons.account_circle_outlined,
                               onPressed: () => _accountPressed(student),
                             );

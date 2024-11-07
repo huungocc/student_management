@@ -15,10 +15,29 @@ class _NotifState extends State<Notif> {
   final TextEditingController _controllerSearch = TextEditingController();
   bool isAdmin = false;
 
+  final NotifService _notifService = NotifService();
+  List<Map<String,dynamic>> notifData = [];
+
   @override
   void initState() {
     super.initState();
     _checkPermission();
+    loadAllNotifData();
+  }
+
+  Future<void> loadAllNotifData() async{
+    try {
+      List<Map<String,dynamic>> loadedNotifData = await _notifService.loadAllNotifData();
+      setState(() {
+        notifData = loadedNotifData;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã có lỗi xảy ra'),
+        ),
+      );
+    }
   }
 
   Future<void> _checkPermission() async {
@@ -26,26 +45,24 @@ class _NotifState extends State<Notif> {
     setState(() {});
   }
 
-  void _onNotifPressed() {
-    //hủy focus vào textfield
-    FocusScope.of(context).requestFocus(new FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerSearch.clear());
+  void _onNotifPressed(Map<String, dynamic> notifData) {
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    String info = notifData['content'];
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return InfoScreen(
           isAdmin: isAdmin,
-          title:
-              'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-          description: 'dd/mm/yyyy',
-          info:
-              'Trong những ngày vừa qua, cơn bão số 3 (tên quốc tế là Yagi) với cường độ rất mạnh đã tàn phá và gây thiệt hại nặng nề cho các tỉnh miền Bắc nước ta. Trong khó khăn hoạn nạn, tinh thần tương thân tương ái, lá lành đùm lá rách của dân tộc ta trở nên mạnh mẽ hơn bao giờ hết. Ngay khi nắm được thông tin về thiệt hại do bão lũ gây ra, Trường Đại học Giao thông vận tải đã tích cực hưởng ứng, cũng như triển khai kịp thời nhiều hoạt động có ý nghĩa nhằm góp phần động viên, làm vơi bớt những đau thương mất mát, giúp nhân dân vùng bị bão lũ, thiên tai nhanh chóng ổn định đời sống, khôi phục sản xuất.',
+          title: notifData['title'] ?? 'N/A',
+          description: notifData['datetime'] ?? 'N/A',
+          info: info,
           iconData: Icons.notifications_active_outlined,
           leftButtonTitle: AppLocalizations.of(context)!.delete,
           rightButtonTitle: AppLocalizations.of(context)!.edit,
-          onLeftPressed: _deleteNotif,
-          onRightPressed: _editNotif,
+          onLeftPressed: () => _deleteNotif(notifData['datetime']),
+          onRightPressed: () => _editNotif(notifData),
         );
       },
     );
@@ -53,9 +70,6 @@ class _NotifState extends State<Notif> {
 
   void _addNotif() {
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _controllerSearch.clear());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -64,33 +78,62 @@ class _NotifState extends State<Notif> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: EditNoti(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
-          ),
+          child: EditNoti(isAddNotif: true),
         );
       },
+    ).then((_) {
+      _onNotifRefresh();
+    });
+  }
+
+  Future<void> _deleteNotif(String datetime) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    await CustomDialogUtil.showDialogConfirm(
+        context,
+        content: 'Xóa thông báo?',
+        onSubmit: () async {
+          try {
+            await _notifService.deleteNotification(datetime);
+
+            await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Xóa thông báo thành công',
+                onSubmit: () {
+                  Navigator.pop(context);
+                  loadAllNotifData();
+                }
+            );
+          } catch (e) {
+            print(e);
+            await CustomDialogUtil.showDialogNotification(
+              context,
+              content: 'Xóa thông báo thất bại',
+            );
+          }
+        }
     );
   }
 
-  Future<void> _deleteNotif() async {
-    //
-  }
-
-  void _editNotif() {
-    _addNotif();
-  }
-
-  Future<void> _onCancelPressed() async {
-    Navigator.pop(context);
-  }
-
-  Future<void> _onOkPressed() async {
-    //
+  void _editNotif(Map<String, dynamic> notifData) {
+    FocusScope.of(context).requestFocus(FocusNode());
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: EditNoti(isAddNotif: false, notifData: notifData),
+        );
+      },
+    ).then((_) {
+      _onNotifRefresh();
+    });
   }
 
   Future<void> _onNotifRefresh() async {
-    //
+    loadAllNotifData();
   }
 
   @override
@@ -143,15 +186,24 @@ class _NotifState extends State<Notif> {
                 ),
               ),
               SizedBox(height: 15),
-              RefreshIndicator(
-                onRefresh: _onNotifRefresh,
-                child: SingleChildScrollView(
-                  child: InfoCard(
-                  title: 'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                  description: 'dd/mm/yyyy',
-                  iconData: Icons.notifications_active_outlined,
-                  onPressed: _onNotifPressed,
-                )),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _onNotifRefresh,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemCount: notifData.length,
+                    itemBuilder: (context, index) {
+                      final notif = notifData[index];
+                      return InfoCard(
+                        title: notif['title'] ?? 'Unknown Title',
+                        description: notif['datetime'] ?? 'Unknown Datetime',
+                        iconData: Icons.notifications_active_outlined,
+                        onPressed: () => _onNotifPressed(notif),
+                      );
+                    },
+                  ),
+                ),
               )
             ],
           ),

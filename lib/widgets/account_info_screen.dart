@@ -11,6 +11,7 @@ class AccountInfoScreen extends StatefulWidget {
   final Color? elColor;
   final String buttonTitle;
   final VoidCallback? onPressed;
+  final bool isAdmin;
 
   const AccountInfoScreen({
     Key? key,
@@ -22,6 +23,7 @@ class AccountInfoScreen extends StatefulWidget {
     this.elColor,
     this.buttonTitle = '',
     this.onPressed,
+    required this.isAdmin
   }) : super(key: key);
 
   @override
@@ -90,26 +92,29 @@ class _InfoScreenState extends State<AccountInfoScreen> {
             ),
           ),
           SizedBox(height: 15),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black87,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-            onPressed: widget.onPressed,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.settings_outlined, color: Colors.white),
-                SizedBox(width: 10),
-                Text(
-                    widget.buttonTitle,
-                    style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
+          Visibility(
+            visible: widget.isAdmin,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black87,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                SizedBox(width: 7),
-              ],
+              ),
+              onPressed: widget.onPressed,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.settings_outlined, color: Colors.white),
+                  SizedBox(width: 10),
+                  Text(
+                      widget.buttonTitle,
+                      style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
+                  ),
+                  SizedBox(width: 7),
+                ],
+              ),
             ),
           ),
           SizedBox(height: 15),

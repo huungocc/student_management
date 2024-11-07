@@ -78,6 +78,11 @@ class _UserScreenState extends State<UserScreen> {
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
       );
+    } else if (!Validator.validatePhone(phone)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: 'Sai định dạng SĐT',
+      );
     } else {
       try {
         await _accountService.editUserInfo(

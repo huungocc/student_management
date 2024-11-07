@@ -32,16 +32,41 @@ class SubjectService {
     }
   }
 
-  // Xóa môn học
+  //xóa môn học
   Future<void> deleteSubject(String title) async {
     try {
-      await _firestore
-          .collection("subject")
-          .doc(title)
-          .delete();
+      QuerySnapshot classSnapshot = await _firestore
+          .collection("class")
+          .where('subject', isEqualTo: title)
+          .get();
+
+      for (DocumentSnapshot classDoc in classSnapshot.docs) {
+        QuerySnapshot studentsSnapshot = await classDoc.reference.collection("students").get();
+        for (DocumentSnapshot studentDoc in studentsSnapshot.docs) {
+          await studentDoc.reference.delete();
+        }
+
+        await classDoc.reference.delete();
+      }
+
+      await _firestore.collection("subject").doc(title).delete();
     } catch (e) {
       print(e);
-      return null;
+    }
+  }
+
+
+  // Lấy danh sách tiêu đề các môn học
+  Future<List<String>> loadAllSubjectTitles() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('subject').get();
+      List<String> subjectTitles = querySnapshot.docs.map((doc) {
+        return doc['title'] as String;
+      }).toList();
+      return subjectTitles;
+    } catch (e) {
+      print(e);
+      return [];
     }
   }
 }
