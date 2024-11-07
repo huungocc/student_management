@@ -19,6 +19,9 @@ class _HomeState extends State<Home> {
   bool isAdmin = false;
   String userRole = '';
 
+  final NotifService _notifService = NotifService();
+  Map<String, dynamic>? latestNotif;
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
     await _checkPermission();
     await _getUserRole();
     await _loadUserData();
-    //Todo: Load thông báo mới nhất
+    await _loadLatestNotif();
     setState(() {});
   }
 
@@ -54,6 +57,21 @@ class _HomeState extends State<Home> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> _loadLatestNotif() async {
+    try {
+      Map<String,dynamic>? loadedLatestNotifData = await _notifService.loadLatestNotif();
+      setState(() {
+        latestNotif = loadedLatestNotifData;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã có lỗi xảy ra'),
+        ),
+      );
     }
   }
 
@@ -140,7 +158,7 @@ class _HomeState extends State<Home> {
 
   Future<void> _onHomeRefresh() async {
     _loadUserData();
-    //Todo: Load thông báo mới nhất
+    _loadLatestNotif();
   }
 
   @override
@@ -210,8 +228,8 @@ class _HomeState extends State<Home> {
                   child: Column(children: [
                     InfoCard(
                       title:
-                      'Trường Đại học Giao thông vận tải chia sẻ khó khăn cùng đồng bào bị ảnh hưởng do thiên tai, lũ lụt',
-                      description: 'dd/mm/yyyy',
+                      latestNotif?['title'] ?? 'N/A',
+                      description: latestNotif?['datetime'] ?? 'N/A',
                       iconData: Icons.notifications_active_outlined,
                       bgColor: Colors.teal,
                       elColor: Colors.white,

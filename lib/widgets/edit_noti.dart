@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../managers/manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../services/service.dart';
+import 'widget.dart';
+
 class EditNoti extends StatefulWidget {
-  final VoidCallback onCancelPressed;
-  final VoidCallback onOkPressed;
+  final bool isAddNotif;
+  final Map<String, dynamic>? notifData;
 
-  const EditNoti({
-    Key? key,
-    required this.onCancelPressed,
-    required this.onOkPressed,
-  }) : super(key: key);
-
+  const EditNoti({super.key, required this.isAddNotif, this.notifData});
 
   @override
   State<EditNoti> createState() => _EditNotiState();
@@ -21,6 +20,98 @@ class _EditNotiState extends State<EditNoti> {
   final TextEditingController _controllerTitle = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
+  final _notifService = NotifService();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserData();
+  }
+
+  void _initializeUserData() {
+    if (widget.notifData != null) {
+      _controllerTitle.text = widget.notifData?['title'] ?? '';
+      _controllerDescription.text = widget.notifData?['content'] ?? '';
+    }
+  }
+
+  Future<void> addNotif() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    String title = _controllerTitle.text.trim();
+    String content = _controllerDescription.text.trim();
+    String datetime = DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+
+    if(title.isEmpty || content.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    }
+    else {
+      await CustomDialogUtil.showDialogConfirm(
+          context,
+          content: 'Tạo thông báo $title',
+          onSubmit: () async {
+            try {
+              await _notifService.addNotification(title, content, datetime);
+
+              await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Tạo thông báo thành công',
+                  onSubmit: () => Navigator.pop(context)
+              );
+            } catch (e) {
+              print(e);
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Tạo thông báo thất bại',
+              );
+            }
+          }
+      );
+    }
+  }
+
+  Future<void> editNotif() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    String title = _controllerTitle.text.trim();
+    String content = _controllerDescription.text.trim();
+    String datetime = widget.notifData?['datetime'];
+
+    if(title.isEmpty || content.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    }
+    else {
+      await CustomDialogUtil.showDialogConfirm(
+          context,
+          content: 'Sửa thông báo $title',
+          onSubmit: () async {
+            try {
+              await _notifService.addNotification(title, content, datetime);
+
+              await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Sửa thông báo thành công',
+                  onSubmit: () => Navigator.pop(context)
+              );
+            } catch (e) {
+              print(e);
+              await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Sửa thông báo thất bại',
+              );
+            }
+          }
+      );
+    }
+  }
+
+  void onCancelPressed(){
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +123,7 @@ class _EditNotiState extends State<EditNoti> {
             TextField(
               controller: _controllerTitle,
               cursorColor: Colors.black87,
+              enabled: widget.isAddNotif,
               keyboardType: TextInputType.multiline,
               minLines: 2,
               maxLines: 2,
@@ -94,7 +186,7 @@ class _EditNotiState extends State<EditNoti> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onCancelPressed,
+                  onPressed: onCancelPressed,
                   child: Text(
                     AppLocalizations.of(context)!.cancel,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
@@ -110,7 +202,7 @@ class _EditNotiState extends State<EditNoti> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: widget.onOkPressed,
+                  onPressed: widget.isAddNotif ? addNotif : editNotif,
                   child: Text(
                       AppLocalizations.of(context)!.ok,
                     style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)

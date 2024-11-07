@@ -9,4 +9,5 @@ class Routes{
   static const String classes = '/classes';
   static const String classname = '/classname';
   static const String webview = '/webview';
+  static const String score = '/score';
 }

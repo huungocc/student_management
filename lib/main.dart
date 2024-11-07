@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
               Routes.classes: (context) => Classes(),
               Routes.classname: (context) => ClassName(),
               Routes.webview: (context) => WebViewContainer(),
+              Routes.score: (context) => Score()
             },
             localizationsDelegates: [
               AppLocalizations.delegate,

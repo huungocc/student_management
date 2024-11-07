@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:student_management/screens/screen.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
 import '../widgets/widget.dart';
@@ -17,14 +18,16 @@ class _ClassesState extends State<Classes> {
   final AuthService _authService = AuthService();
   bool isAdmin = false;
 
-  final TextEditingController _controllerSearch = TextEditingController();
-
   final List<String> _monhoc = ['mon 1', 'mon 2', 'mon 3'];
+
+  final ClassService _classService = ClassService();
+  List<Map<String, dynamic>> classData = [];
 
   @override
   void initState() {
     super.initState();
     _checkPermission();
+    loadAllClassData();
   }
 
   Future<void> _checkPermission() async {
@@ -32,14 +35,59 @@ class _ClassesState extends State<Classes> {
     setState(() {});
   }
 
-  void _onClassesPressed(){
-    Navigator.pushNamed(context, Routes.classname);
+  Future<void> loadAllClassData() async {
+    try {
+      List<Map<String, dynamic>> loadedClassData = await _classService.loadAllClassData();
+
+      setState(() {
+        classData = loadedClassData;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Đã có lỗi xảy ra'),
+        ),
+      );
+    }
+  }
+
+  void _onClassesPressed(String className) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ClassName(className: className),
+      ),
+    );
+  }
+
+  Future<void> _deleteClass(String title) async {
+    await CustomDialogUtil.showDialogConfirm(
+        context,
+        content: 'Xóa môn học $title',
+        onSubmit: () async {
+          try {
+            await _classService.deleteClass(title);
+
+            await CustomDialogUtil.showDialogNotification(
+                context,
+                content: 'Xóa lớp học thành công',
+                onSubmit: () {
+                  loadAllClassData();
+                }
+            );
+          } catch (e) {
+            print(e);
+            await CustomDialogUtil.showDialogNotification(
+              context,
+              content: 'Xóa lớp học thất bại',
+            );
+          }
+        }
+    );
   }
 
   void _addClass(){
     FocusScope.of(context).requestFocus(FocusNode());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _controllerSearch.clear());
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -48,34 +96,16 @@ class _ClassesState extends State<Classes> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: AddClasses(
-            onCancelPressed: _onCancelPressed,
-            onOkPressed: _onOkPressed,
-            onAddMemberPressed: _onAddMemberPressed,
-          ),
+          child: AddClasses(isAddClass: true),
         );
       },
-    );
-  }
-
-  void _onAddMemberPressed() {
-    //
-  }
-
-  void _onCancelPressed(){
-    Navigator.pop(context);
-  }
-
-  Future<void> _onOkPressed() async{
-
-  }
-
-  Future<void> _deleteSubject() async {
-    //
+    ).then((_) {
+      _onClassesRefresh();
+    });
   }
 
   Future<void> _onClassesRefresh() async {
-    //
+    loadAllClassData();
   }
 
   @override
@@ -140,19 +170,24 @@ class _ClassesState extends State<Classes> {
               ),
             ),
             SizedBox(height: 15),
-            RefreshIndicator(
-              onRefresh: _onClassesRefresh,
-              child: Scrollbar(
-                thumbVisibility: true,
-                radius: Radius.circular(8),
-                child: SingleChildScrollView(
-                  child: InfoCard(
-                    title: 'Toan',
-                    description: 'Dai Cuong',
-                    iconData: Icons.school_outlined,
-                    onPressed: _onClassesPressed,
-                  )
-                )
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _onClassesRefresh,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: classData.length,
+                  itemBuilder: (context, index) {
+                    final classes = classData[index];
+                    return InfoCard(
+                      title: classes['title'] ?? 'Unknown Class',
+                      description: classes['subject'] ?? 'Unknown Subject',
+                      iconData: Icons.school_outlined,
+                      onPressed: () => _onClassesPressed(classes['title']),
+                      onLongPressed: () => _deleteClass(classes['title']),
+                    );
+                  },
+                ),
               ),
             )
           ],

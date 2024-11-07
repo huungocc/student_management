@@ -55,46 +55,41 @@ class _AddSubject extends State<AddSubject> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final List<String> listCredit = ['1', '2', '3'];
-    final List<String> listCategory = ['Đại cương', 'Chuyên ngành'];
+  Future<void> addSubject() async {
+    FocusScope.of(context).requestFocus(FocusNode());
 
-    Future<void> addSubject() async {
-      FocusScope.of(context).requestFocus(FocusNode());
+    String name = _controllerSubjectName.text.trim();
+    String description = _controllerDescription.text.trim();
+    String totalDays = _controllerTotalDays.text.trim();
+    String credit = _currentCredit;
+    String category = _currentCategory;
 
-      String name = _controllerSubjectName.text.trim();
-      String description = _controllerDescription.text.trim();
-      String totalDays = _controllerTotalDays.text.trim();
-      String credit = _currentCredit;
-      String category = _currentCategory;
+    if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else {
+      if (category == 'Đại cương') category = SubjectType.general;
+      if (category == 'Chuyên ngành') category = SubjectType.major;
 
-      if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
-        await CustomDialogUtil.showDialogNotification(
-          context,
-          content: AppLocalizations.of(context)!.emptyInfo,
-        );
-      } else {
-        if (category == 'Đại cương') category = SubjectType.general;
-        if (category == 'Chuyên ngành') category = SubjectType.major;
-
-        await CustomDialogUtil.showDialogConfirm(
+      await CustomDialogUtil.showDialogConfirm(
           context,
           content: 'Tạo môn học $name',
           onSubmit: () async {
             try {
               await _subjectService.addSubject(
-                name,
-                category,
-                credit,
-                description,
-                totalDays
+                  name,
+                  category,
+                  credit,
+                  description,
+                  totalDays
               );
 
               await CustomDialogUtil.showDialogNotification(
-                context,
-                content: 'Tạo môn học thành công',
-                onSubmit: () => Navigator.pop(context)
+                  context,
+                  content: 'Tạo môn học thành công',
+                  onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
               print(e);
@@ -104,29 +99,29 @@ class _AddSubject extends State<AddSubject> {
               );
             }
           }
-        );
-      }
+      );
     }
+  }
 
-    Future<void> editSubject() async {
-      FocusScope.of(context).requestFocus(FocusNode());
+  Future<void> editSubject() async {
+    FocusScope.of(context).requestFocus(FocusNode());
 
-      String name = _controllerSubjectName.text.trim();
-      String description = _controllerDescription.text.trim();
-      String totalDays = _controllerTotalDays.text.trim();
-      String credit = '';
-      String category = '';
+    String name = _controllerSubjectName.text.trim();
+    String description = _controllerDescription.text.trim();
+    String totalDays = _controllerTotalDays.text.trim();
+    String credit = '';
+    String category = '';
 
-      if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
-        await CustomDialogUtil.showDialogNotification(
-          context,
-          content: AppLocalizations.of(context)!.emptyInfo,
-        );
-      } else {
-        if (category == 'Đại cương') category = SubjectType.general;
-        if (category == 'Chuyên ngành') category = SubjectType.major;
+    if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else {
+      if (category == 'Đại cương') category = SubjectType.general;
+      if (category == 'Chuyên ngành') category = SubjectType.major;
 
-        await CustomDialogUtil.showDialogConfirm(
+      await CustomDialogUtil.showDialogConfirm(
           context,
           content: 'Sửa môn học $name',
           onSubmit: () async {
@@ -151,14 +146,18 @@ class _AddSubject extends State<AddSubject> {
               );
             }
           }
-        );
-      }
+      );
     }
+  }
 
-    void onCancelPressed() {
-      Navigator.pop(context);
-    }
+  void onCancelPressed() {
+    Navigator.pop(context);
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final List<String> listCredit = ['1', '2', '3'];
+    final List<String> listCategory = ['Đại cương', 'Chuyên ngành'];
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
