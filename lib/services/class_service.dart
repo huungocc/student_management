@@ -112,7 +112,14 @@ class ClassService {
 
           // Lấy tên sinh viên từ collection "student"
           DocumentSnapshot studentDoc = await _firestore.collection("student").doc(email).get();
-          String studentName = studentDoc.exists ? studentDoc['name']?.toString() ?? '' : '';
+          String studentName = '';
+
+          if (studentDoc.exists) {
+            final studentData = studentDoc.data() as Map<String, dynamic>?; // Ép kiểu
+            studentName = studentData != null && studentData.containsKey('name')
+                ? studentData['name'].toString()
+                : '';
+          }
 
           return {
             'email': email,
@@ -129,6 +136,8 @@ class ClassService {
       return [];
     }
   }
+
+
 
   // Hàm sửa điểm của sinh viên
   Future<void> updateStudentScore(
