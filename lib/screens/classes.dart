@@ -8,7 +8,9 @@ import '../services/service.dart';
 import '../widgets/widget.dart';
 
 class Classes extends StatefulWidget {
-  const Classes({super.key});
+  final String? email;
+
+  const Classes({super.key, this.email});
 
   @override
   State<Classes> createState() => _ClassesState();
@@ -26,8 +28,12 @@ class _ClassesState extends State<Classes> {
   @override
   void initState() {
     super.initState();
-    _checkPermission();
-    loadAllClassData();
+    initData();
+  }
+
+  Future<void> initData() async {
+    await _checkPermission();
+    await _loadClassData();
   }
 
   Future<void> _checkPermission() async {
@@ -35,9 +41,16 @@ class _ClassesState extends State<Classes> {
     setState(() {});
   }
 
-  Future<void> loadAllClassData() async {
+  Future<void> _loadClassData() async {
+    print(widget.email);
     try {
-      List<Map<String, dynamic>> loadedClassData = await _classService.loadAllClassData();
+      List<Map<String, dynamic>> loadedClassData;
+
+      if (isAdmin) {
+        loadedClassData = await _classService.loadAllClassData();
+      } else {
+        loadedClassData = await _classService.getClassesByUserEmail(widget.email!);
+      }
 
       setState(() {
         classData = loadedClassData;
@@ -72,7 +85,7 @@ class _ClassesState extends State<Classes> {
                 context,
                 content: 'Xóa lớp học thành công',
                 onSubmit: () {
-                  loadAllClassData();
+                  _loadClassData();
                 }
             );
           } catch (e) {
@@ -105,7 +118,7 @@ class _ClassesState extends State<Classes> {
   }
 
   Future<void> _onClassesRefresh() async {
-    loadAllClassData();
+    _loadClassData();
   }
 
   @override

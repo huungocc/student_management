@@ -7,13 +7,21 @@ class SubjectService {
   Future<void> addSubject(String title, String category, String credit,
       String description, String totalDays) async {
     try {
-      await _firestore
-          .collection("subject")
-          .doc(title)
-          .set({'title': title, 'category': category, 'credit': credit, 'description': description, 'totalDays': totalDays});
+      DocumentSnapshot docSnapshot = await _firestore.collection("subject").doc(title).get();
+      if (docSnapshot.exists) {
+        throw Exception("Môn học đã tồn tại");
+      }
+
+      await _firestore.collection("subject").doc(title).set({
+        'title': title,
+        'category': category,
+        'credit': credit,
+        'description': description,
+        'totalDays': totalDays
+      });
     } catch (e) {
       print(e);
-      return null;
+      throw e;
     }
   }
 
@@ -54,7 +62,6 @@ class SubjectService {
       print(e);
     }
   }
-
 
   // Lấy danh sách tiêu đề các môn học
   Future<List<String>> loadAllSubjectTitles() async {

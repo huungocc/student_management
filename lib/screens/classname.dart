@@ -78,7 +78,6 @@ class _ClassNameState extends State<ClassName> {
         studentData = newStudentData;
         teacherData = newTeacherData;
       });
-      print(classData);
     } catch (e) {
       print(e);
       if (mounted) {

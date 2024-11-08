@@ -207,10 +207,17 @@ class _AddClasses extends State<AddClasses> {
               );
             } catch (e) {
               print(e);
-              await CustomDialogUtil.showDialogNotification(
-                context,
-                content: 'Tạo lớp học thất bại',
-              );
+              if (e.toString().contains("Lớp học đã tồn tại")) {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Lớp học đã tồn tại',
+                );
+              } else {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Tạo lớp học thất bại',
+                );
+              }
             }
           }
       );

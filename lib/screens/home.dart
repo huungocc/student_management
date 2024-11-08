@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:student_management/screens/screen.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
 import '../widgets/widget.dart';
@@ -96,7 +97,9 @@ class _HomeState extends State<Home> {
   }
 
   void _onNotiPressed() {
-    Navigator.pushNamed(context, Routes.notif);
+    Navigator.pushNamed(context, Routes.notif).then((_) {
+      _onHomeRefresh();
+    });
   }
 
   Future<void> _onSchedulePressed() async {
@@ -123,7 +126,12 @@ class _HomeState extends State<Home> {
   }
 
   void _onClassPressed() {
-    Navigator.pushNamed(context, Routes.classes);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Classes(email: currentUserData!['email']),
+      )
+    );
   }
 
   void _onInfoPressed() {

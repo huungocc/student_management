@@ -93,10 +93,17 @@ class _AddSubject extends State<AddSubject> {
               );
             } catch (e) {
               print(e);
-              await CustomDialogUtil.showDialogNotification(
-                context,
-                content: 'Tạo môn học thất bại',
-              );
+              if (e.toString().contains("Môn học đã tồn tại")) {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Môn học đã tồn tại',
+                );
+              } else {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Tạo môn học thất bại',
+                );
+              }
             }
           }
       );

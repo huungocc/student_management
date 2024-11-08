@@ -62,10 +62,17 @@ class _EditNotiState extends State<EditNoti> {
               );
             } catch (e) {
               print(e);
-              await CustomDialogUtil.showDialogNotification(
-                context,
-                content: 'Tạo thông báo thất bại',
-              );
+              if (e.toString().contains("Thông báo với tiêu đề này đã tồn tại")) {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Thông báo đã tồn tại',
+                );
+              } else {
+                await CustomDialogUtil.showDialogNotification(
+                  context,
+                  content: 'Tạo thông báo thất bại',
+                );
+              }
             }
           }
       );

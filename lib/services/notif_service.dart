@@ -7,27 +7,42 @@ class NotifService {
   Future<void> addNotification(String title,
       String content, String datetime) async {
     try {
+      QuerySnapshot existingNotif = await _firestore
+          .collection("notif")
+          .where('title', isEqualTo: title)
+          .get();
+
+      if (existingNotif.docs.isNotEmpty) {
+        throw Exception("Thông báo với tiêu đề này đã tồn tại");
+      }
+
       await _firestore
           .collection("notif")
           .doc(datetime)
           .set({'title': title, 'content': content, 'datetime': datetime});
     } catch (e) {
       print(e);
-      return null;
+      throw e;
     }
   }
 
-  //load data
+  //load data theo thứ tự mới nhất trước
   Future<List<Map<String, dynamic>>> loadAllNotifData() async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('notif').get();
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('notif')
+          .orderBy('datetime', descending: true)
+          .get();
+
       List<Map<String, dynamic>> notifData = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
         return data;
       }).toList();
+
       return notifData;
     } catch (e) {
+      print(e);
       return [];
     }
   }
@@ -64,5 +79,4 @@ class NotifService {
       return null;
     }
   }
-
 }
