@@ -20,10 +20,13 @@ class _ClassesState extends State<Classes> {
   final AuthService _authService = AuthService();
   bool isAdmin = false;
 
-  final List<String> _monhoc = ['mon 1', 'mon 2', 'mon 3'];
-
   final ClassService _classService = ClassService();
   List<Map<String, dynamic>> classData = [];
+  List<Map<String, dynamic>> filteredClassData = [];
+
+  final SubjectService _subjectService = SubjectService();
+  List<String> subjectList = [];
+  String selectedSubject = 'Tất cả';
 
   @override
   void initState() {
@@ -34,11 +37,26 @@ class _ClassesState extends State<Classes> {
   Future<void> initData() async {
     await _checkPermission();
     await _loadClassData();
+    await _loadSubjectList();
   }
 
   Future<void> _checkPermission() async {
     isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
+  }
+
+  Future<void> _loadSubjectList() async {
+    try{
+      List<String> loadedSubjectList = await _subjectService.loadAllSubjectTitles();
+      loadedSubjectList.insert(0, 'Tất cả');
+
+      setState(() {
+        subjectList = loadedSubjectList;
+        _filterClasses(selectedSubject);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _loadClassData() async {
@@ -54,6 +72,7 @@ class _ClassesState extends State<Classes> {
 
       setState(() {
         classData = loadedClassData;
+        _filterClasses(selectedSubject);
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,6 +80,24 @@ class _ClassesState extends State<Classes> {
           content: Text('Đã có lỗi xảy ra'),
         ),
       );
+    }
+  }
+
+  void _filterClasses(String? subject) {
+    if (subject == null || subject == 'Tất cả') {
+      setState(() {
+        filteredClassData = List.from(classData);
+        selectedSubject = 'Tất cả';
+      });
+    } else {
+      setState(() {
+        filteredClassData = classData
+            .where((classItem) =>
+        classItem['subject']?.toString().toLowerCase() ==
+            subject.toLowerCase())
+            .toList();
+        selectedSubject = subject;
+      });
     }
   }
 
@@ -153,7 +190,7 @@ class _ClassesState extends State<Classes> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              items: _monhoc.map((item) => DropdownMenuItem<String>(
+              items: subjectList.map((item) => DropdownMenuItem<String>(
                 value: item,
                 child: Text(
                   item,
@@ -161,7 +198,7 @@ class _ClassesState extends State<Classes> {
                 ),
               )).toList(),
               onChanged: (value) {
-                //
+                _filterClasses(value);
               },
               buttonStyleData: ButtonStyleData(
                 padding: EdgeInsets.only(right: 8),
@@ -186,12 +223,19 @@ class _ClassesState extends State<Classes> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _onClassesRefresh,
-                child: ListView.builder(
+                child: filteredClassData.isEmpty
+                ? Center(
+                  child: Text(
+                    'Không có lớp học nào',
+                    style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
+                  ),
+                )
+                : ListView.builder(
                   shrinkWrap: true,
                   physics: AlwaysScrollableScrollPhysics(),
-                  itemCount: classData.length,
+                  itemCount: filteredClassData.length,
                   itemBuilder: (context, index) {
-                    final classes = classData[index];
+                    final classes = filteredClassData[index];
                     return InfoCard(
                       title: classes['title'] ?? 'Unknown Class',
                       description: classes['subject'] ?? 'Unknown Subject',

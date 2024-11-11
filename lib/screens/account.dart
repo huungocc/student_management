@@ -18,11 +18,52 @@ class _AccountState extends State<Account> {
   List<Map<String, dynamic>> adminData = [];
   List<Map<String, dynamic>> teacherData = [];
   List<Map<String, dynamic>> studentData = [];
+  List<Map<String, dynamic>> searchResults = [];
+  bool isSearching = false;
 
   @override
   void initState() {
     super.initState();
     loadAllUserData();
+    _controllerSearch.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _controllerSearch.removeListener(_onSearchChanged);
+    _controllerSearch.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final searchQuery = _controllerSearch.text.toLowerCase().trim();
+    if (searchQuery.isEmpty) {
+      setState(() {
+        isSearching = false;
+        searchResults.clear();
+      });
+      return;
+    }
+
+    final allUsers = [...adminData, ...teacherData, ...studentData];
+    final results = allUsers.where((user) {
+      final name = (user['name'] ?? '').toString().toLowerCase();
+      final email = (user['email'] ?? '').toString().toLowerCase();
+      final userID = (user['userID'] ?? '').toString().toLowerCase();
+      final gender = (user['gender'] ?? '').toString().toLowerCase();
+      final phone = (user['phone'] ?? '').toString().toLowerCase();
+
+      return name.contains(searchQuery) ||
+          email.contains(searchQuery) ||
+          userID.contains(searchQuery) ||
+          gender.contains(searchQuery) ||
+          phone.contains(searchQuery);
+    }).toList();
+
+    setState(() {
+      isSearching = true;
+      searchResults = results;
+    });
   }
 
   Future<void> loadAllUserData() async {
@@ -102,6 +143,34 @@ class _AccountState extends State<Account> {
     loadAllUserData();
   }
 
+  Widget _buildSearchResults() {
+    if (searchResults.isEmpty) {
+      return Center(
+        child: Text(
+          'Không có người dùng nào',
+          style: TextStyle(
+              fontSize: 16,
+              fontFamily: Fonts.display_font,
+              color: Colors.black54
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: searchResults.length,
+      itemBuilder: (context, index) {
+        final user = searchResults[index];
+        return InfoCard(
+          title: user['name'] ?? user['email'],
+          description: user['userID'] ?? 'N/A',
+          iconData: Icons.account_circle_outlined,
+          onPressed: () => _accountPressed(user),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,75 +214,87 @@ class _AccountState extends State<Account> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _onAccountRefresh,
-                child: ListView(
-                  physics: AlwaysScrollableScrollPhysics(),
+                child: Stack(
                   children: [
-                    ExpansionTile(
-                      title: Text(
-                          AppLocalizations.of(context)!.admin,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
-                      ),
-                      children: <Widget>[
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: adminData.length,
-                          itemBuilder: (context, index) {
-                            final admin = adminData[index];
-                            return InfoCard(
-                              title: admin['name'] ?? admin['email'],
-                              description: admin['userID'] ?? 'N/A',
-                              iconData: Icons.account_circle_outlined,
-                              onPressed: () => _accountPressed(admin),
-                            );
-                          },
+                    RefreshIndicator(
+                      onRefresh: _onAccountRefresh,
+                      child: Visibility(
+                        visible: !isSearching,
+                        child: ListView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          children: [
+                            ExpansionTile(
+                              title: Text(
+                                  AppLocalizations.of(context)!.admin,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                              ),
+                              children: <Widget>[
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: adminData.length,
+                                  itemBuilder: (context, index) {
+                                    final admin = adminData[index];
+                                    return InfoCard(
+                                      title: admin['name'] ?? admin['email'],
+                                      description: admin['userID'] ?? 'N/A',
+                                      iconData: Icons.account_circle_outlined,
+                                      onPressed: () => _accountPressed(admin),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text(
+                                  AppLocalizations.of(context)!.teacher,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                              ),
+                              children: <Widget>[
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: teacherData.length,
+                                  itemBuilder: (context, index) {
+                                    final teacher = teacherData[index];
+                                    return InfoCard(
+                                      title: teacher['name'] ?? teacher['email'],
+                                      description: teacher['userID'] ?? 'N/A',
+                                      iconData: Icons.account_circle_outlined,
+                                      onPressed: () => _accountPressed(teacher),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text(
+                                  AppLocalizations.of(context)!.student,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
+                              ),
+                              children: <Widget>[
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: studentData.length,
+                                  itemBuilder: (context, index) {
+                                    final student = studentData[index];
+                                    return InfoCard(
+                                      title: student['name'] ?? student['email'],
+                                      description: student['userID'] ?? 'N/A',
+                                      iconData: Icons.account_circle_outlined,
+                                      onPressed: () => _accountPressed(student),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    ExpansionTile(
-                      title: Text(
-                          AppLocalizations.of(context)!.teacher,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
                       ),
-                      children: <Widget>[
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: teacherData.length,
-                          itemBuilder: (context, index) {
-                            final teacher = teacherData[index];
-                            return InfoCard(
-                              title: teacher['name'] ?? teacher['email'],
-                              description: teacher['userID'] ?? 'N/A',
-                              iconData: Icons.account_circle_outlined,
-                              onPressed: () => _accountPressed(teacher),
-                            );
-                          },
-                        ),
-                      ],
                     ),
-                    ExpansionTile(
-                      title: Text(
-                          AppLocalizations.of(context)!.student,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, fontFamily: Fonts.display_font, color: Colors.black)
-                      ),
-                      children: <Widget>[
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: studentData.length,
-                          itemBuilder: (context, index) {
-                            final student = studentData[index];
-                            return InfoCard(
-                              title: student['name'] ?? student['email'],
-                              description: student['userID'] ?? 'N/A',
-                              iconData: Icons.account_circle_outlined,
-                              onPressed: () => _accountPressed(student),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                    if (isSearching)
+                      _buildSearchResults(),
                   ],
                 ),
               ),
