@@ -18,6 +18,7 @@ class _SubjectState extends State<Subject> {
 
   final SubjectService _subjectService = SubjectService();
   List<Map<String, dynamic>> subjectData = [];
+  List<Map<String, dynamic>> filteredSubjectData = [];
 
   final TextEditingController _controllerSearch = TextEditingController();
 
@@ -26,11 +27,30 @@ class _SubjectState extends State<Subject> {
     super.initState();
     _checkPermission();
     loadAllSubjectData();
+    _controllerSearch.addListener(_filterSubjects);
   }
 
   Future<void> _checkPermission() async {
     isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
+  }
+
+  void _filterSubjects() {
+    String searchText = _controllerSearch.text.toLowerCase();
+    setState(() {
+      filteredSubjectData = subjectData.where((subject) {
+        final title = subject['title']?.toLowerCase() ?? '';
+        final category = subject['category']?.toLowerCase() ?? '';
+        return title.contains(searchText) || category.contains(searchText);
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controllerSearch.removeListener(_filterSubjects);
+    _controllerSearch.dispose();
+    super.dispose();
   }
 
   Future<void> loadAllSubjectData() async {
@@ -39,6 +59,7 @@ class _SubjectState extends State<Subject> {
 
       setState(() {
         subjectData = loadedSubjectData;
+        filteredSubjectData = loadedSubjectData;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -197,19 +218,26 @@ class _SubjectState extends State<Subject> {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: _onSubjectRefresh,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: subjectData.length,
-                    itemBuilder: (context, index) {
-                      final subject = subjectData[index];
-                      return InfoCard(
-                        title: subject['title'] ?? 'Unknown Subject',
-                        description: subject['category'] ?? 'Unknown Category',
-                        iconData: Icons.school_outlined,
-                        onPressed: () => _onSubjectPressed(subject),
-                      );
-                    },
+                  child: filteredSubjectData.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Không có môn học nào',
+                        style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
+                      ),
+                  )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: filteredSubjectData.length,
+                      itemBuilder: (context, index) {
+                        final subject = filteredSubjectData[index];
+                        return InfoCard(
+                          title: subject['title'] ?? 'Unknown Subject',
+                          description: subject['category'] ?? 'Unknown Category',
+                          iconData: Icons.school_outlined,
+                          onPressed: () => _onSubjectPressed(subject),
+                        );
+                      },
                   ),
                 ),
               )

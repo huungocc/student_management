@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
 import '../widgets/widget.dart';
@@ -45,8 +46,23 @@ class _LoginState extends State<Login> {
       );
     } else {
       try {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return Center(
+              child: SpinKitThreeBounce(
+                color: Colors.white,
+                size: 30.0,
+              ),
+            );
+          },
+        );
+
         User? user =
         await _authService.signInWithEmailAndPassword(email, password);
+
+        Navigator.pop(context);
 
         await CustomDialogUtil.showDialogNotification(
           context,
@@ -59,6 +75,7 @@ class _LoginState extends State<Login> {
         );
       } catch (e) {
         print(e);
+        Navigator.pop(context);
         await CustomDialogUtil.showDialogNotification(
           context,
           content: AppLocalizations.of(context)!.signInFailed,

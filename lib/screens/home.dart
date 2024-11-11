@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:student_management/screens/screen.dart';
 import '../managers/manager.dart';
 import '../services/service.dart';
@@ -78,15 +79,29 @@ class _HomeState extends State<Home> {
 
   Future<void> _signOut() async {
     try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: SpinKitThreeBounce(
+              color: Colors.white,
+              size: 30.0,
+            ),
+          );
+        },
+      );
+
       await _authService.signOut();
 
+      Navigator.pop(context);
       await CustomDialogUtil.showDialogNotification(
         context,
         content: 'Đăng xuất thành công',
         onSubmit: () => Navigator.pushReplacementNamed(context, Routes.login)
       );
     } catch (e) {
-      print(e);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.signOutFailed),

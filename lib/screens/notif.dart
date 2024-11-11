@@ -17,19 +17,30 @@ class _NotifState extends State<Notif> {
 
   final NotifService _notifService = NotifService();
   List<Map<String,dynamic>> notifData = [];
+  List<Map<String, dynamic>> filteredNotifData = [];
 
   @override
   void initState() {
     super.initState();
     _checkPermission();
     loadAllNotifData();
+    _controllerSearch.addListener(_filterNotifData);
+  }
+
+  @override
+  void dispose() {
+    _controllerSearch.removeListener(_filterNotifData);
+    _controllerSearch.dispose();
+    super.dispose();
   }
 
   Future<void> loadAllNotifData() async{
     try {
       List<Map<String,dynamic>> loadedNotifData = await _notifService.loadAllNotifData();
+
       setState(() {
         notifData = loadedNotifData;
+        filteredNotifData = loadedNotifData;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -43,6 +54,15 @@ class _NotifState extends State<Notif> {
   Future<void> _checkPermission() async {
     isAdmin = await _authService.hasPermission([UserRole.admin]);
     setState(() {});
+  }
+
+  void _filterNotifData() {
+    String searchQuery = _controllerSearch.text.toLowerCase();
+    setState(() {
+      filteredNotifData = notifData
+          .where((notif) => notif['title']?.toLowerCase().contains(searchQuery) ?? false)
+          .toList();
+    });
   }
 
   void _onNotifPressed(Map<String, dynamic> notifData) {
@@ -189,12 +209,19 @@ class _NotifState extends State<Notif> {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: _onNotifRefresh,
-                  child: ListView.builder(
+                  child: filteredNotifData.isEmpty
+                  ? Center(
+                    child: Text(
+                      'Không có thông báo nào',
+                      style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
+                    ),
+                  )
+                  : ListView.builder(
                     shrinkWrap: true,
                     physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: notifData.length,
+                    itemCount: filteredNotifData.length,
                     itemBuilder: (context, index) {
-                      final notif = notifData[index];
+                      final notif = filteredNotifData[index];
                       return InfoCard(
                         title: notif['title'] ?? 'Unknown Title',
                         description: notif['datetime'] ?? 'Unknown Datetime',
