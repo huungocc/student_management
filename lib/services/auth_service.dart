@@ -25,8 +25,8 @@ class AuthService {
   }
 
   // Đăng ký tài khoản với email, mật khẩu và role
-  Future<User?> signUpWithEmailAndPassword(String email, String password, String role, String userID) async {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+  Future<void> signUpWithEmailAndPassword(String email, String password, String role, String userID) async {
+      await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -36,7 +36,6 @@ class AuthService {
         'role': role,
         'userID': userID
       });
-      return userCredential.user;
   }
 
   // Đăng xuất

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_management/widgets/widget.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../managers/manager.dart';
 
 class AddMember extends StatefulWidget {
@@ -38,16 +38,16 @@ class _AddMemberState extends State<AddMember> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text(
-              'Thêm Thành Viên',
+            title: Text(
+              AppLocalizations.of(context)!.addMember,
               style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: Fonts.display_font, fontWeight: FontWeight.bold),
             ),
-            bottom: const TabBar(
+            bottom: TabBar(
               indicatorColor: Colors.black87,
               labelColor: Colors.black87,
               tabs: [
-                Tab(text: 'Giảng viên'),
-                Tab(text: 'Sinh viên'),
+                Tab(text: AppLocalizations.of(context)!.teacher),
+                Tab(text: AppLocalizations.of(context)!.student),
               ],
             ),
           ),
@@ -121,7 +121,7 @@ class _AddMemberState extends State<AddMember> {
             });
           },
           child: Text(
-            "Xác nhận",
+              AppLocalizations.of(context)!.ok,
             style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font)
           ),
         ),

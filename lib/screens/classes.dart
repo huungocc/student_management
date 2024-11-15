@@ -77,7 +77,7 @@ class _ClassesState extends State<Classes> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -113,14 +113,14 @@ class _ClassesState extends State<Classes> {
   Future<void> _deleteClass(String title) async {
     await CustomDialogUtil.showDialogConfirm(
         context,
-        content: 'Xóa môn học $title',
+        content: AppLocalizations.of(context)!.deleteSubject + title,
         onSubmit: () async {
           try {
             await _classService.deleteClass(title);
 
             await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Xóa lớp học thành công',
+                content: AppLocalizations.of(context)!.delClassSuccess,
                 onSubmit: () {
                   _loadClassData();
                 }
@@ -129,7 +129,7 @@ class _ClassesState extends State<Classes> {
             print(e);
             await CustomDialogUtil.showDialogNotification(
               context,
-              content: 'Xóa lớp học thất bại',
+              content: AppLocalizations.of(context)!.delClassFail,
             );
           }
         }
@@ -226,7 +226,7 @@ class _ClassesState extends State<Classes> {
                 child: filteredClassData.isEmpty
                 ? Center(
                   child: Text(
-                    'Không có lớp học nào',
+                    AppLocalizations.of(context)!.noData,
                     style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
                   ),
                 )
@@ -237,8 +237,8 @@ class _ClassesState extends State<Classes> {
                   itemBuilder: (context, index) {
                     final classes = filteredClassData[index];
                     return InfoCard(
-                      title: classes['title'] ?? 'Unknown Class',
-                      description: classes['subject'] ?? 'Unknown Subject',
+                      title: classes['title'] ?? 'N/A',
+                      description: classes['subject'] ?? 'N/A',
                       iconData: Icons.school_outlined,
                       onPressed: () => _onClassesPressed(classes['title']),
                       onLongPressed: () => _deleteClass(classes['title']),

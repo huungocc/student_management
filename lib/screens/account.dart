@@ -80,7 +80,7 @@ class _AccountState extends State<Account> {
     }  catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -107,7 +107,7 @@ class _AccountState extends State<Account> {
           description: userData['role'] ?? 'N/A',
           info: info,
           iconData: Icons.account_circle_outlined,
-          buttonTitle: 'Nâng cao',
+          buttonTitle: AppLocalizations.of(context)!.advanced,
           onPressed: () => _openFirebaseUserConsole(),
           isAdmin: true,
         );
@@ -147,7 +147,7 @@ class _AccountState extends State<Account> {
     if (searchResults.isEmpty) {
       return Center(
         child: Text(
-          'Không có người dùng nào',
+          AppLocalizations.of(context)!.noData,
           style: TextStyle(
               fontSize: 16,
               fontFamily: Fonts.display_font,

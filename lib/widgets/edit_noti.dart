@@ -50,14 +50,14 @@ class _EditNotiState extends State<EditNoti> {
     else {
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Tạo thông báo $title',
+          content: AppLocalizations.of(context)!.addNotif + title,
           onSubmit: () async {
             try {
               await _notifService.addNotification(title, content, datetime);
 
               await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo thông báo thành công',
+                  content: AppLocalizations.of(context)!.addNotifSuccess,
                   onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
@@ -65,12 +65,12 @@ class _EditNotiState extends State<EditNoti> {
               if (e.toString().contains("Thông báo với tiêu đề này đã tồn tại")) {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Thông báo đã tồn tại',
+                  content: AppLocalizations.of(context)!.existNotif,
                 );
               } else {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo thông báo thất bại',
+                  content: AppLocalizations.of(context)!.addNotifFail,
                 );
               }
             }
@@ -94,21 +94,21 @@ class _EditNotiState extends State<EditNoti> {
     else {
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Sửa thông báo $title',
+          content: AppLocalizations.of(context)!.editNotif + title,
           onSubmit: () async {
             try {
-              await _notifService.addNotification(title, content, datetime);
+              await _notifService.editNotification(title, content, datetime);
 
               await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Sửa thông báo thành công',
+                  content: AppLocalizations.of(context)!.editNotifSuccess,
                   onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
               print(e);
               await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Sửa thông báo thất bại',
+                content: AppLocalizations.of(context)!.editNotifFail,
               );
             }
           }

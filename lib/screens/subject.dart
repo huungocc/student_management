@@ -64,7 +64,7 @@ class _SubjectState extends State<Subject> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -119,14 +119,14 @@ class _SubjectState extends State<Subject> {
     FocusScope.of(context).requestFocus(FocusNode());
     await CustomDialogUtil.showDialogConfirm(
       context,
-      content: 'Xóa môn học $title',
+      content: AppLocalizations.of(context)!.deleteSubject + title,
       onSubmit: () async {
         try {
           await _subjectService.deleteSubject(title);
 
           await CustomDialogUtil.showDialogNotification(
             context,
-            content: 'Xóa môn học thành công',
+            content: AppLocalizations.of(context)!.delSubjectSuccess,
             onSubmit: () {
               Navigator.pop(context);
               loadAllSubjectData();
@@ -136,7 +136,7 @@ class _SubjectState extends State<Subject> {
           print(e);
           await CustomDialogUtil.showDialogNotification(
             context,
-            content: 'Xóa môn học thất bại',
+            content: AppLocalizations.of(context)!.delSubjectFail,
           );
         }
       }
@@ -221,7 +221,7 @@ class _SubjectState extends State<Subject> {
                   child: filteredSubjectData.isEmpty
                   ? Center(
                       child: Text(
-                        'Không có môn học nào',
+                        AppLocalizations.of(context)!.noData,
                         style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
                       ),
                   )
@@ -232,8 +232,8 @@ class _SubjectState extends State<Subject> {
                       itemBuilder: (context, index) {
                         final subject = filteredSubjectData[index];
                         return InfoCard(
-                          title: subject['title'] ?? 'Unknown Subject',
-                          description: subject['category'] ?? 'Unknown Category',
+                          title: subject['title'] ?? 'N/A',
+                          description: subject['category'] ?? 'N/A',
                           iconData: Icons.school_outlined,
                           onPressed: () => _onSubjectPressed(subject),
                         );

@@ -57,21 +57,21 @@ class _EditNotiState extends State<AddAccount> {
       if (_selectedRole == AppLocalizations.of(context)!.student) role = UserRole.student;
       await CustomDialogUtil.showDialogConfirm(
         context,
-        content: 'Tạo tài khoản $_selectedRole\nID: $userID',
+        content: AppLocalizations.of(context)!.addAccount + _selectedRole + '\nID: ' + userID,
         onSubmit: () async {
           try {
             await _authService.signUpWithEmailAndPassword(email, password, role, userID);
 
             await CustomDialogUtil.showDialogNotification(
               context,
-              content: 'Tạo tài khoản thành công',
+              content: AppLocalizations.of(context)!.addAccountSuccess,
               onSubmit: () => Navigator.pop(context)
             );
           } catch (e) {
             print(e);
             await CustomDialogUtil.showDialogNotification(
               context,
-              content: 'Tạo tài khoản thất bại',
+              content: AppLocalizations.of(context)!.addAccountFail,
             );
           }
         }

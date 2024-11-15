@@ -339,7 +339,7 @@ class _UserScreenState extends State<UserScreen> {
             ),
             onPressed: _onChangePasswordPressed,
             child: Text(
-                'Đổi mật khẩu',
+                AppLocalizations.of(context)!.changePass,
                 style: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font, fontSize: 16)
             ),
           ),

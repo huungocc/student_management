@@ -25,6 +25,22 @@ class SubjectService {
     }
   }
 
+  //edit
+  Future<void> editSubject(String title, String category, String credit,
+      String description, String totalDays) async {
+    try {
+      await _firestore.collection("subject").doc(title).set({
+        'title': title,
+        'category': category,
+        'credit': credit,
+        'description': description,
+        'totalDays': totalDays
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Load data subject
   Future<List<Map<String, dynamic>>> loadAllSubjectData() async {
     try {

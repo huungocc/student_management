@@ -98,7 +98,7 @@ class _AddClasses extends State<AddClasses> {
     }  catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -114,7 +114,7 @@ class _AddClasses extends State<AddClasses> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -187,7 +187,7 @@ class _AddClasses extends State<AddClasses> {
     } else {
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Tạo lớp học $title\nMôn học: $subject',
+          content: AppLocalizations.of(context)!.addClass + title,
           onSubmit: () async {
             try {
               await _classService.addClass(
@@ -202,7 +202,7 @@ class _AddClasses extends State<AddClasses> {
 
               await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo lớp học thành công',
+                  content: AppLocalizations.of(context)!.addClassSuccess,
                   onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
@@ -210,12 +210,12 @@ class _AddClasses extends State<AddClasses> {
               if (e.toString().contains("Lớp học đã tồn tại")) {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Lớp học đã tồn tại',
+                  content: AppLocalizations.of(context)!.existClass,
                 );
               } else {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo lớp học thất bại',
+                  content: AppLocalizations.of(context)!.addClassFail,
                 );
               }
             }
@@ -243,10 +243,10 @@ class _AddClasses extends State<AddClasses> {
     } else {
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Sửa lớp học $title',
+          content: AppLocalizations.of(context)!.editClass + title,
           onSubmit: () async {
             try {
-              await _classService.addClass(
+              await _classService.editClass(
                   title,
                   subject,
                   startDay,
@@ -258,14 +258,14 @@ class _AddClasses extends State<AddClasses> {
 
               await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Sửa lớp học thành công',
+                  content: AppLocalizations.of(context)!.editClassSuccess,
                   onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
               print(e);
               await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Sửa lớp học thất bại',
+                content: AppLocalizations.of(context)!.editClassFail,
               );
             }
           }

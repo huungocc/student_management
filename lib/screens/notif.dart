@@ -45,7 +45,7 @@ class _NotifState extends State<Notif> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -110,14 +110,14 @@ class _NotifState extends State<Notif> {
     FocusScope.of(context).requestFocus(FocusNode());
     await CustomDialogUtil.showDialogConfirm(
         context,
-        content: 'Xóa thông báo?',
+        content: AppLocalizations.of(context)!.deleteNotif,
         onSubmit: () async {
           try {
             await _notifService.deleteNotification(datetime);
 
             await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Xóa thông báo thành công',
+                content: AppLocalizations.of(context)!.delNotifSuccess,
                 onSubmit: () {
                   Navigator.pop(context);
                   loadAllNotifData();
@@ -127,7 +127,7 @@ class _NotifState extends State<Notif> {
             print(e);
             await CustomDialogUtil.showDialogNotification(
               context,
-              content: 'Xóa thông báo thất bại',
+              content: AppLocalizations.of(context)!.delNotifFail,
             );
           }
         }
@@ -212,7 +212,7 @@ class _NotifState extends State<Notif> {
                   child: filteredNotifData.isEmpty
                   ? Center(
                     child: Text(
-                      'Không có thông báo nào',
+                      AppLocalizations.of(context)!.noData,
                       style: TextStyle(fontSize: 16, color: Colors.black54, fontFamily: Fonts.display_font),
                     ),
                   )
@@ -223,8 +223,8 @@ class _NotifState extends State<Notif> {
                     itemBuilder: (context, index) {
                       final notif = filteredNotifData[index];
                       return InfoCard(
-                        title: notif['title'] ?? 'Unknown Title',
-                        description: notif['datetime'] ?? 'Unknown Datetime',
+                        title: notif['title'] ?? 'N/A',
+                        description: notif['datetime'] ?? 'N/A',
                         iconData: Icons.notifications_active_outlined,
                         onPressed: () => _onNotifPressed(notif),
                       );

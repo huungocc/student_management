@@ -26,6 +26,19 @@ class NotifService {
     }
   }
 
+  //edit
+  Future<void> editNotification(String title,
+      String content, String datetime) async {
+    try {
+      await _firestore
+          .collection("notif")
+          .doc(datetime)
+          .set({'title': title, 'content': content, 'datetime': datetime});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //load data theo thứ tự mới nhất trước
   Future<List<Map<String, dynamic>>> loadAllNotifData() async {
     try {
