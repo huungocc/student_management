@@ -83,7 +83,7 @@ class _ClassNameState extends State<ClassName> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Đã có lỗi xảy ra'),
+            content: Text(AppLocalizations.of(context)!.error),
           ),
         );
       }
@@ -232,7 +232,7 @@ class _ClassNameState extends State<ClassName> {
                     ),
                     onPressed: () => _onScorePressed(widget.className),
                     child: Text(
-                      "Điểm",
+                      AppLocalizations.of(context)!.score,
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: Fonts.display_font,

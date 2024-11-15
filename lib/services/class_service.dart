@@ -51,6 +51,38 @@ class ClassService {
     }
   }
 
+  //edit
+  Future<void> editClass(
+      String title,
+      String subject,
+      String startDay,
+      String daysInWeek,
+      String room,
+      String teacher,
+      List<String> students) async {
+    try {
+      await _firestore.collection("class").doc(title).set({
+        'title': title,
+        'subject': subject,
+        'startDay': startDay,
+        'daysInWeek': daysInWeek,
+        'room': room,
+        'teacher': teacher,
+      });
+
+      for (String student in students) {
+        await _firestore
+            .collection("class")
+            .doc(title)
+            .collection("students")
+            .doc(student)
+            .set({'email': student});
+      }
+    } catch (e) {
+      print('Error adding class: $e');
+    }
+  }
+
   //Load data lớp học
   Future<List<Map<String, dynamic>>> loadAllClassData() async {
     try {

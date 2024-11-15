@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Đã có lỗi xảy ra khi tải thông tin'),
+            content: Text(AppLocalizations.of(context)!.error),
           ),
         );
       }
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Đã có lỗi xảy ra'),
+          content: Text(AppLocalizations.of(context)!.error),
         ),
       );
     }
@@ -97,15 +97,14 @@ class _HomeState extends State<Home> {
       Navigator.pop(context);
       await CustomDialogUtil.showDialogNotification(
         context,
-        content: 'Đăng xuất thành công',
+        content: AppLocalizations.of(context)!.signOutSuccess,
         onSubmit: () => Navigator.pushReplacementNamed(context, Routes.login)
       );
     } catch (e) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.signOutFailed),
-        ),
+      await CustomDialogUtil.showDialogNotification(
+          context,
+          content: AppLocalizations.of(context)!.signOutFailed,
       );
       throw e;
     }

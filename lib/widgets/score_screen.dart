@@ -186,15 +186,15 @@ class _ScoreState extends State<Score> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cập nhật điểm thành công'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.editScoreSuccess),
           backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Lỗi khi cập nhật điểm: $e'),
+          content: Text(AppLocalizations.of(context)!.editScoreFail),
           backgroundColor: Colors.red,
         ),
       );
@@ -240,7 +240,7 @@ class _ScoreState extends State<Score> {
   Widget _buildExpandableTable() {
     return ExpandableTable(
       key: UniqueKey(),
-      firstHeaderCell: _buildHeaderCell('Họ tên'),
+      firstHeaderCell: _buildHeaderCell(AppLocalizations.of(context)!.fullName),
       headers: [
         ExpandableTableHeader(cell: _buildHeaderCell('QT')),
         ExpandableTableHeader(cell: _buildHeaderCell('Thi')),
@@ -341,8 +341,8 @@ class _ScoreState extends State<Score> {
         preferredSize: const Size.fromHeight(70.0),
         child: AppBar(
           centerTitle: true,
-          title: const Text(
-            'Điểm',
+          title: Text(
+            AppLocalizations.of(context)!.score,
             style: TextStyle(
               fontSize: 20,
               color: Colors.black,

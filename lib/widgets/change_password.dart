@@ -51,7 +51,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
           await CustomDialogUtil.showDialogNotification(
             context,
-            content: 'Đổi mật khẩu thành công',
+            content: AppLocalizations.of(context)!.changePassSuccess,
             onSubmit: () => Navigator.pushNamedAndRemoveUntil(
               context,
               Routes.home,
@@ -62,7 +62,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           print(e);
           await CustomDialogUtil.showDialogNotification(
             context,
-            content: 'Đổi mật khẩu thất bại',
+            content: AppLocalizations.of(context)!.changePassFail,
           );
         }
       }
@@ -150,9 +150,9 @@ class _ChangePasswordState extends State<ChangePassword> {
             style: TextStyle(fontSize: 16, color: Colors.black87, fontFamily: Fonts.display_font),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-              labelText: 'Xác nhận mật khẩu mới',
+              labelText: AppLocalizations.of(context)!.confirmNewPass,
               labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-              hintText: 'Xác nhận mật khẩu mới',
+              hintText: AppLocalizations.of(context)!.confirmNewPass,
               hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
               suffixIcon: IconButton(
                 onPressed: () {
@@ -186,7 +186,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             onPressed: changePassword,
             child: Text(
-              'Đổi mật khẩu',
+                AppLocalizations.of(context)!.changePass,
               style: TextStyle(color: Colors.white, fontFamily: Fonts.display_font, fontSize: 16)
             ),
           ),

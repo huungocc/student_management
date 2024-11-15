@@ -66,7 +66,7 @@ class _LoginState extends State<Login> {
 
         await CustomDialogUtil.showDialogNotification(
           context,
-          content: 'Đăng nhập thành công',
+          content: AppLocalizations.of(context)!.signInSuccess,
           onSubmit: () {
             if (user != null) {
               Navigator.pushReplacementNamed(context, Routes.home);

@@ -75,7 +75,7 @@ class _AddSubject extends State<AddSubject> {
 
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Tạo môn học $name',
+          content: AppLocalizations.of(context)!.addSubject + name,
           onSubmit: () async {
             try {
               await _subjectService.addSubject(
@@ -88,7 +88,7 @@ class _AddSubject extends State<AddSubject> {
 
               await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo môn học thành công',
+                  content: AppLocalizations.of(context)!.addSubjectSuccess,
                   onSubmit: () => Navigator.pop(context)
               );
             } catch (e) {
@@ -96,12 +96,12 @@ class _AddSubject extends State<AddSubject> {
               if (e.toString().contains("Môn học đã tồn tại")) {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Môn học đã tồn tại',
+                  content: AppLocalizations.of(context)!.existSubject,
                 );
               } else {
                 await CustomDialogUtil.showDialogNotification(
                   context,
-                  content: 'Tạo môn học thất bại',
+                  content: AppLocalizations.of(context)!.addSubjectFail,
                 );
               }
             }
@@ -130,10 +130,10 @@ class _AddSubject extends State<AddSubject> {
 
       await CustomDialogUtil.showDialogConfirm(
           context,
-          content: 'Sửa môn học $name',
+          content: AppLocalizations.of(context)!.editSubject + name,
           onSubmit: () async {
             try {
-              await _subjectService.addSubject(
+              await _subjectService.editSubject(
                   name,
                   category,
                   credit,
@@ -143,13 +143,13 @@ class _AddSubject extends State<AddSubject> {
 
               await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Sửa môn học thành công',
+                content: AppLocalizations.of(context)!.editSubjectSuccess,
               );
             } catch (e) {
               print(e);
               await CustomDialogUtil.showDialogNotification(
                 context,
-                content: 'Sửa môn học thất bại',
+                content: AppLocalizations.of(context)!.editSubjectFail,
               );
             }
           }
@@ -294,7 +294,7 @@ class _AddSubject extends State<AddSubject> {
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.description,
                   labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                  hintText: 'Mô tả',
+                  hintText: AppLocalizations.of(context)!.description,
                   hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -317,7 +317,7 @@ class _AddSubject extends State<AddSubject> {
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.numberOfDays,
                 labelStyle: TextStyle(color: Colors.black87, fontFamily: Fonts.display_font),
-                hintText: "Tổng số buổi",
+                hintText: AppLocalizations.of(context)!.numberOfDays,
                 hintStyle: TextStyle(color: Colors.black26, fontFamily: Fonts.display_font),
                 contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 15),
                 border: OutlineInputBorder(
