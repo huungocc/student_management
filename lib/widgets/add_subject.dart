@@ -69,6 +69,16 @@ class _AddSubject extends State<AddSubject> {
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
       );
+    } else if (name.length > 255 || description.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
+      );
+    } else if (!Validator.isNumeric(totalDays)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.errorNumber,
+      );
     } else {
       if (category == 'Đại cương') category = SubjectType.general;
       if (category == 'Chuyên ngành') category = SubjectType.major;
@@ -116,13 +126,23 @@ class _AddSubject extends State<AddSubject> {
     String name = _controllerSubjectName.text.trim();
     String description = _controllerDescription.text.trim();
     String totalDays = _controllerTotalDays.text.trim();
-    String credit = '';
-    String category = '';
+    String credit = _currentCredit;
+    String category = _currentCategory;
 
     if (name.isEmpty || description.isEmpty || totalDays.isEmpty || credit.isEmpty || category.isEmpty) {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else if (name.length > 255 || description.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
+      );
+    } else if (!Validator.isNumeric(totalDays)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.errorNumber,
       );
     } else {
       if (category == 'Đại cương') category = SubjectType.general;

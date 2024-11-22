@@ -81,7 +81,12 @@ class _UserScreenState extends State<UserScreen> {
     } else if (!Validator.validatePhone(phone)) {
       await CustomDialogUtil.showDialogNotification(
         context,
-        content: 'Sai định dạng SĐT',
+        content: AppLocalizations.of(context)!.wrongSDT,
+      );
+    } else if (name.length > 255 || country.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
       );
     } else {
       try {
@@ -98,7 +103,7 @@ class _UserScreenState extends State<UserScreen> {
 
         await CustomDialogUtil.showDialogNotification(
           context,
-          content: 'Sửa thông tin thành công',
+          content: AppLocalizations.of(context)!.editInfoSuccess,
           onSubmit: () => Navigator.pushNamedAndRemoveUntil(
             context,
             Routes.home,
@@ -109,7 +114,7 @@ class _UserScreenState extends State<UserScreen> {
         print(e);
         await CustomDialogUtil.showDialogNotification(
           context,
-          content: 'Sửa thông tin thất bại',
+          content: AppLocalizations.of(context)!.editInfoFail,
         );
       }
     }

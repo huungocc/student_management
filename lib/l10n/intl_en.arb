@@ -95,5 +95,10 @@
   "editNotifFail": "Notification editing failed",
   "existNotif": "Notification already exists",
   "editScoreSuccess": "Score updated successfully",
-  "editScoreFail": "Score update failed"
+  "editScoreFail": "Score update failed",
+  "error255": "Information must not exceed 255 characters",
+  "wrongSDT": "Invalid phone number format",
+  "editInfoSuccess": "Information updated successfully",
+  "editInfoFail": "Failed to update information",
+  "errorNumber": "Total days must be number"
 }
