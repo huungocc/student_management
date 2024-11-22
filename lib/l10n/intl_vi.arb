@@ -95,5 +95,10 @@
   "editNotifFail": "Sửa thông báo thất bại",
   "existNotif": "Thông báo đã tồn tại",
   "editScoreSuccess": "Cập nhật điểm thành công",
-  "editScoreFail": "Cập nhật điểm thất bại"
+  "editScoreFail": "Cập nhật điểm thất bại",
+  "error255": "Tiêu đề hoặc thông tin không được vượt quá 255 kí tự",
+  "wrongSDT": "Sai định dạng SĐT",
+  "editInfoSuccess": "Sửa thông tin thành công",
+  "editInfoFail": "Sửa thông tin thất bại",
+  "errorNumber": "Tổng số ngày chỉ được nhập số"
 }

@@ -70,6 +70,16 @@ class ClassService {
         'teacher': teacher,
       });
 
+      QuerySnapshot existingStudents = await _firestore
+          .collection("class")
+          .doc(title)
+          .collection("students")
+          .get();
+
+      for (var doc in existingStudents.docs) {
+        await doc.reference.delete();
+      }
+
       for (String student in students) {
         await _firestore
             .collection("class")

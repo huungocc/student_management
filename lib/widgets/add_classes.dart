@@ -184,6 +184,11 @@ class _AddClasses extends State<AddClasses> {
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
       );
+    } else if (title.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
+      );
     } else {
       await CustomDialogUtil.showDialogConfirm(
           context,
@@ -239,6 +244,11 @@ class _AddClasses extends State<AddClasses> {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else if (title.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
       );
     } else {
       await CustomDialogUtil.showDialogConfirm(

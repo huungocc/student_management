@@ -46,6 +46,11 @@ class _EditNotiState extends State<EditNoti> {
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
       );
+    } else if (title.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
+      );
     }
     else {
       await CustomDialogUtil.showDialogConfirm(

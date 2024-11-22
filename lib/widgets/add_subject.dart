@@ -69,6 +69,16 @@ class _AddSubject extends State<AddSubject> {
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
       );
+    } else if (name.length > 255) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.error255,
+      );
+    } else if (!Validator.isNumeric(totalDays)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.errorNumber,
+      );
     } else {
       if (category == 'Đại cương') category = SubjectType.general;
       if (category == 'Chuyên ngành') category = SubjectType.major;
@@ -123,6 +133,11 @@ class _AddSubject extends State<AddSubject> {
       await CustomDialogUtil.showDialogNotification(
         context,
         content: AppLocalizations.of(context)!.emptyInfo,
+      );
+    } else if (!Validator.isNumeric(totalDays)) {
+      await CustomDialogUtil.showDialogNotification(
+        context,
+        content: AppLocalizations.of(context)!.errorNumber,
       );
     } else {
       if (category == 'Đại cương') category = SubjectType.general;
